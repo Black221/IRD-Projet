@@ -1,7 +1,21 @@
 {
-  "name": "API-Ressource",
+  "name": "api-ressource",
   "version": "1.0.0",
   "dependencies": {
-    
-  }
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "fs": "^0.0.1-security",
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.3.6",
+    "nodemon": "^2.0.16"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "main": "server.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

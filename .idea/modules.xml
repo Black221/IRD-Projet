@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/API-Auth.iml" filepath="$PROJECT_DIR$/API-Auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/API-Ressource.iml" filepath="$PROJECT_DIR$/API-Ressource.iml" />
       <module fileurl="file://$PROJECT_DIR$/IRD-Projet.iml" filepath="$PROJECT_DIR$/IRD-Projet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Platfrom.iml" filepath="$PROJECT_DIR$/Platfrom.iml" />
     </modules>
   </component>
 </project>
