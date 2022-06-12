@@ -21,6 +21,10 @@ import { DatasetEcgComponent } from './dataset-ecg/dataset-ecg.component';
 import { DatasetEcgViewComponent } from './dataset-ecg-view/dataset-ecg-view.component';
 import { ActivityComponent } from './activity/activity.component';
 import { SpecificDatasetComponent } from './specific-dataset/specific-dataset.component';
+import { AddEcgComponent } from './add-ecg/add-ecg.component';
+import { AddDatasetComponent } from './add-dataset/add-dataset.component';
+import { AddPatientComponent } from './add-patient/add-patient.component';
+import { AddMedecinComponent } from './add-medecin/add-medecin.component';
 
 
 // @ts-ignore
@@ -35,6 +39,10 @@ const appRoutes : Routes = [
     { path: 'platform/patient/:id', component: PatientComponent},
     { path: 'platform/medecin', component: MedecinComponent},
     { path: 'platform/medecin/:id', component: MedecinComponent},
+    { path: 'platform/add/dataset', component: AddDatasetComponent},
+    { path: 'platform/add/ecg', component: AddEcgComponent},
+    { path: 'platform/edit/dataset/:id', component: AddDatasetComponent},
+    { path: 'platform/edit/ecg/:id', component: AddEcgComponent}
 ];
 
 @NgModule({
@@ -57,7 +65,11 @@ const appRoutes : Routes = [
         DatasetEcgComponent,
         DatasetEcgViewComponent,
         ActivityComponent,
-        SpecificDatasetComponent
+        SpecificDatasetComponent,
+        AddEcgComponent,
+        AddDatasetComponent,
+        AddPatientComponent,
+        AddMedecinComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),

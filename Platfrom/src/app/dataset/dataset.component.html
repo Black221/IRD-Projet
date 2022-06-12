@@ -1,4 +1,20 @@
 <div class="d-flex justify-content-center" style="flex-wrap: wrap">
+    <div class="container d-flex justify-content-between mb-4">
+        <div class="filter">
+            <form action="">
+                <select class="form-select dropdown" name="" id="">
+                    <option value="">--Filter--</option>
+                    <option value="name">Name</option>
+                    <option value="created_at">Creation date</option>
+                    <option value="last_update">Last update</option>
+                    <option value="number_of_ecg">Number of ecg</option>
+                </select>
+            </form>
+        </div>
+        <div class="addDataset">
+            <a routerLink="/platform/add/dataset" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add Dataset</a>
+        </div>
+    </div>
     <app-dataset-view></app-dataset-view>
     <app-dataset-view></app-dataset-view>
     <app-dataset-view></app-dataset-view>
