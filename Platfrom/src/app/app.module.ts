@@ -18,13 +18,15 @@ import { EcgViewComponent } from './ecg-view/ecg-view.component';
 import { PatientViewComponent } from './patient-view/patient-view.component';
 import { MedecinViewComponent } from './medecin-view/medecin-view.component';
 import { DatasetEcgComponent } from './dataset-ecg/dataset-ecg.component';
-import { DatasetEcgViewComponent } from './dataset-ecg-view/dataset-ecg-view.component';
 import { ActivityComponent } from './activity/activity.component';
 import { SpecificDatasetComponent } from './specific-dataset/specific-dataset.component';
 import { AddEcgComponent } from './add-ecg/add-ecg.component';
 import { AddDatasetComponent } from './add-dataset/add-dataset.component';
 import { AddPatientComponent } from './add-patient/add-patient.component';
 import { AddMedecinComponent } from './add-medecin/add-medecin.component';
+import {DatasetService} from "../services/dataset.service";
+import {EcgService} from "../services/ecg.service";
+import {DatasetEcgViewComponent} from "./dataset-ecg-view/dataset-ecg-view.component";
 
 
 // @ts-ignore
@@ -32,7 +34,7 @@ const appRoutes : Routes = [
     { path: 'platform', component: HistoryComponent},
     { path: 'platform/home', component: HistoryComponent},
     { path: 'platform/dataset', component: DatasetComponent},
-    { path: 'platform/dataset/ecg/:id', component: SpecificDatasetComponent},
+    { path: 'platform/dataset/:id', component: SpecificDatasetComponent},
     { path: 'platform/ecg', component: DatasetEcgComponent},
     { path: 'platform/ecg/:id', component: SpecificEcgComponent},
     { path: 'platform/patient', component: PatientComponent},
@@ -63,19 +65,22 @@ const appRoutes : Routes = [
         PatientViewComponent,
         MedecinViewComponent,
         DatasetEcgComponent,
-        DatasetEcgViewComponent,
         ActivityComponent,
         SpecificDatasetComponent,
         AddEcgComponent,
         AddDatasetComponent,
         AddPatientComponent,
-        AddMedecinComponent
+        AddMedecinComponent,
+        DatasetEcgViewComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),
         BrowserModule
     ],
-    providers: [],
+    providers: [
+        DatasetService,
+        EcgService
+    ],
     bootstrap: [AppComponent]
 })
 

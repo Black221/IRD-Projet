@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Subscription} from "rxjs";
+import {DatasetService} from "../../services/dataset.service";
 
 @Component({
   selector: 'app-dataset',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DatasetComponent implements OnInit {
 
-  constructor() { }
+    datasets: any[] | undefined;
+    datasetSubscription: Subscription | undefined;
 
-  ngOnInit(): void {
-  }
+    constructor(private datasetService: DatasetService) {
 
+    }
+
+    ngOnInit () {
+        this.datasetSubscription = this.datasetService.datasetSubject.subscribe(
+            (datasets: any[]) => {
+                this.datasets = datasets;
+            }
+        );
+        this.datasetService.emitDatasetSubject();
+    }
 }

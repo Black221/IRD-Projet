@@ -10,6 +10,10 @@ export class EcgViewComponent implements OnInit {
     @Input() last_view_at: any;
     @Input() last_update_at: any;
     @Input() name = "ECGName";
+    @Input() dataset: any;
+    @Input() dataset_r: Date | string | undefined | null;
+    @Input() last_updated_at: any;
+    @Input() id = 0;
 
   constructor() { }
 

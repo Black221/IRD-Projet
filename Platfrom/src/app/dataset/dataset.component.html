@@ -15,7 +15,13 @@
             <a routerLink="/platform/add/dataset" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add Dataset</a>
         </div>
     </div>
-    <app-dataset-view></app-dataset-view>
-    <app-dataset-view></app-dataset-view>
-    <app-dataset-view></app-dataset-view>
+    <app-dataset-view
+        *ngFor="let dataset of datasets"
+        [name]="dataset.name"
+        [description]="dataset.description"
+        [created_at]="dataset.created_at | date: 'medium'"
+        [last_updated_at]="dataset.last_updated_at | date: 'medium'"
+        [id]="dataset.id"
+    ></app-dataset-view>
+
 </div>

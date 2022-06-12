@@ -1,3 +1,12 @@
 <div class="container">
-    <app-dataset-ecg-view></app-dataset-ecg-view>
+    <h2>{{name}}</h2>
+    <app-ecg-view *ngFor="let ecg of ecgs"
+                  [dataset_r] = "name"
+                  [name] = "ecg.number"
+                  [dataset] = "ecg.dataset_name"
+                  [last_updated_at] = "ecg.last_update_at"
+                  [last_view_at]="ecg.last_view"
+                  [id] = "ecg.id"
+    >
+    </app-ecg-view>
 </div>

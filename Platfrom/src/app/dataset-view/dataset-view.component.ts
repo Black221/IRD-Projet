@@ -11,8 +11,9 @@ export class DatasetViewComponent implements OnInit {
         " elit. Assumenda commodi distinctio ducimus et eum magni nemo" +
         ", nisi vel vero voluptatem! Asperiores beatae corporis doloribus" +
         "    explicabo obcaecati quam quis ratione voluptatum?";
-    @Input() created_at = "10/12/2021 10:18";
-    @Input() last_update_at = "10/12/2021 10:18";
+    @Input() created_at : Date | String | null | undefined ;
+    @Input() last_updated_at : Date | String | null | undefined;
+    @Input() id: number | undefined;
   constructor() { }
 
   ngOnInit(): void {
