@@ -1,0 +1,22 @@
+/* ==========================================
+    FOR DEMO PURPOSE
+  ========================================== */
+.small {
+    font-size: 0.9rem;
+    color: #333333;
+}
+
+a {
+    text-decoration: none;
+    transition: all 0.3s;
+    color: #333333;
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+
+footer {
+    background: #198654;
+}

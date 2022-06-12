@@ -1,30 +1,35 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
     <div class="container-fluid">
         <div class="collapse navbar-collapse">
-            <span class="navbar-brand" href="#">Logo</span>
-            <span class="navbar-brand" href="#">Platform</span>
+            <span class="navbar-brand" style="color: #333333" >Logo</span>
+            <span class="navbar-brand" style="color: #333333">Platform</span>
         </div>
-        <a class="nav-link link-dark" href="#">Log out</a>
+        <a class="nav-link link-dark">Log out</a>
     </div>
 </nav>
-<div class="card-header justify-content-between flex-row" routerLinkActive="platform">
-    <ul class="nav nav-tabs card-header-tabs w-50 container-fluid link-success">
-        <li class="nav-item">
-            <a class="nav-link link-success active" aria-current="true" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link link-success" href="#">Dataset</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link link-success" href="#">ECG</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link link-success" href="#">Patient</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link link-success" href="#">Medecin</a>
-        </li>
-    </ul>
-
+<div *ngIf="isAuth === true" class="card-header mb-4 justify-content-between" style="display: flex" routerLinkActive="platform">
+    <div class="container-fluid mt-2">
+        <ul class="nav nav-tabs card-header-tabs w-50 container-fluid">
+            <li class="nav-item">
+                <a class="nav-link link-success" routerLink="platform/home" routerLinkActive="active">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-success" routerLink="platform/dataset" routerLinkActive="active">Dataset</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-success" routerLink="platform/ecg" routerLinkActive="active">ECG</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-success" routerLink="platform/patient" routerLinkActive="active">Patient</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-success" routerLink="platform/medecin" routerLinkActive="active">Medecin</a>
+            </li>
+        </ul>
+    </div>
+    <form class="d-flex w-50">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
 </div>
 
