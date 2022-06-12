@@ -6,7 +6,7 @@ const DatasetModel = require("../models/DatasetModel")
 const MetadataModel = require("../models/MetadataModel")
 
 // Controllers
-const DatasetController = require('../controllers/DatasetController')
+const DatasetController = require('../controllers/dataset.controller')
 
 //Creer une pathologie
 router.post('/', DatasetController.addOneDataset)
