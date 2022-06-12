@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dataset-ecg-view.component.css']
 })
 export class DatasetEcgViewComponent implements OnInit {
+    link: any;
+    name: any;
+    last_view_at: any;
+    objectName: any;
+    last_update_at: any;
 
   constructor() { }
 

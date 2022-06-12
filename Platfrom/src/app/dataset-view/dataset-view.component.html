@@ -6,8 +6,8 @@
                 <div class="img-bg"></div>
                 <figcaption>{{name}}</figcaption>
                 <div class="date">
-                    <div>created at : {{created_at}}</div>
-                    <div>last update : {{last_update_at}}</div>
+                    <div><small>created at : {{created_at}}</small></div>
+                    <div><small>last update : {{last_update_at}}</small></div>
                 </div>
             </figure>
             <p>
@@ -20,7 +20,7 @@
                 <div class="img-bg"></div>
             </figure>
 
-            <button>Book</button>
+            <button role="link" routerLink="/platform/dataset/ecg/:id">See ECG</button>
 
             <div class="design-container">
                 <span class="design design--1"></span>

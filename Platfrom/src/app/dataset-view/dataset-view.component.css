@@ -1,12 +1,4 @@
 
-/*
-    ================================
-        Best Viewed In Full Page
-    ================================
-*/
-
-/* Hover over a card to flip, can tab too. */
-
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
 /* default */
@@ -353,4 +345,12 @@ button:focus+.design-container {
     color: hsla(0, 0%, 100%, .6);
     font-size: 16px;
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.date {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 10px;
+    color: hsla(0, 0%, 100%, .6);
 }

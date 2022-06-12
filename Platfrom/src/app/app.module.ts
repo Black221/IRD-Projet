@@ -19,6 +19,8 @@ import { PatientViewComponent } from './patient-view/patient-view.component';
 import { MedecinViewComponent } from './medecin-view/medecin-view.component';
 import { DatasetEcgComponent } from './dataset-ecg/dataset-ecg.component';
 import { DatasetEcgViewComponent } from './dataset-ecg-view/dataset-ecg-view.component';
+import { ActivityComponent } from './activity/activity.component';
+import { SpecificDatasetComponent } from './specific-dataset/specific-dataset.component';
 
 
 // @ts-ignore
@@ -26,9 +28,9 @@ const appRoutes : Routes = [
     { path: 'platform', component: HistoryComponent},
     { path: 'platform/home', component: HistoryComponent},
     { path: 'platform/dataset', component: DatasetComponent},
-    { path: 'platform/dataset/ecg/:id', component: SpecificEcgComponent},
+    { path: 'platform/dataset/ecg/:id', component: SpecificDatasetComponent},
     { path: 'platform/ecg', component: DatasetEcgComponent},
-    { path: 'platform/ecg/:id', component: EcgComponent},
+    { path: 'platform/ecg/:id', component: SpecificEcgComponent},
     { path: 'platform/patient', component: PatientComponent},
     { path: 'platform/patient/:id', component: PatientComponent},
     { path: 'platform/medecin', component: MedecinComponent},
@@ -53,7 +55,9 @@ const appRoutes : Routes = [
         PatientViewComponent,
         MedecinViewComponent,
         DatasetEcgComponent,
-        DatasetEcgViewComponent
+        DatasetEcgViewComponent,
+        ActivityComponent,
+        SpecificDatasetComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),

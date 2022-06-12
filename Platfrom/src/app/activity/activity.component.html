@@ -1,8 +1,8 @@
-<a routerLink="/platform/ecg/:id" class="list-group-item list-group-item-success mb-2" aria-current="true">
+<a routerLink="/platform/{{link}}/:id" class="list-group-item list-group-item-success mb-2" aria-current="true">
     <div class="d-flex w-100 justify-content-between">
         <h5 class="mb-1">{{name}}</h5>
         <small class="text-muted ">Seen at :{{last_view_at}}</small>
     </div>
-    <p class="mb-1">Description : {{description}}</p>
+    <p class="mb-1">Name : {{objectName}}</p>
     <small class="text-muted">last update :{{last_update_at}}</small>
 </a>
