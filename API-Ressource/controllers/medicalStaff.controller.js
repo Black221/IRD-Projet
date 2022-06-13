@@ -53,7 +53,7 @@ module.exports.postOneMedicalStaff = async(req, res) => {
             password: req.body.password,
             profession: req.body.profession,
             permission: req.body.permission,
-            state: req.body.state
+            state: req.body.state 
         });
         const saveMedicalStaff = await newMedicalStaff.save();
         res.status(200).json(saveMedicalStaff);

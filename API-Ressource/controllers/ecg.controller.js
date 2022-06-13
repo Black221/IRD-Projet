@@ -50,12 +50,12 @@ module.exports.postOneEcg = async(req, res) => {
             const metadataIdSave = await metadataId.save();
 
             const ecgId = await new EcgModel({
-                nameDataset: req.body.nameDataset,
+                dataset_name: req.body.dataset_name, // dataset // foreign key 
                 metadata_id: metadataIdSave.id,
-                patient_id: req.body.patient_id,
+                patient_id: req.body.patient_id, // foreign key
                 numberEcg: req.body.numberEcg,
                 filename: req.body.filename,
-                state: req.body.state
+                state: req.body.state // non mecessaire
             });
             const ecgIdSave = await ecgId.save();
             res.status(200).json(ecgIdSave);

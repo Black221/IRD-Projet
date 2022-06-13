@@ -6,7 +6,11 @@ const MetadataModel = require("../models/MetadataModel")
 module.exports.getAllDataset = async(req, res) => {
     try {
         const allDataset = await DatasetModel.find()
-        res.status(200).json({allDataset})      
+        if (allDataset) {
+            res.status(200).json({allDataset})      
+        } else {
+           res.status(200).json('Rien dans la base de donnée') 
+        }
     } catch (error) {
         res.status(500).send('Echec lors de l\'affichage des pathologies présents dans la base de donnée')
     }
@@ -50,7 +54,9 @@ module.exports.updateOneDataset = async(req, res) => {
             {$set: {
                 name: req.body.name,
                 description: req.body.description,
-        }})
+        }},
+        { new: true, upset: true, setDefaultsOnInsert: true }
+        )
             const updatedMetadata = await MetadataModel.findByIdAndUpdate(
                 {_id: updatedDataset.metadata_id},
                 {
@@ -76,7 +82,7 @@ module.exports.removeOneDataset = async(req, res) => {
         const oneDataset = await DatasetModel.findById(req.params.datasetId)
         if (oneDataset) {
             const deletedDataset = await DatasetModel.remove({_id:req.params.datasetId})
-            res.status(200).json('Suppression de la pathologie ' +deletedDataset.name+ ' avec succès...')           
+            res.status(200).json('Suppression de la pathologie ' +oneDataset.name+ ' avec succès...')           
     
         } else {
             res.status(400).send({message: 'Id inexistant'})

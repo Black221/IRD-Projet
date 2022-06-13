@@ -46,10 +46,10 @@ module.exports.recordPatient = async(req, res) => {
             name: req.body.name,
             surname: req.body.surname,
             dateOfBirth: req.body.dateOfBirth,
-            cni: req.body.cni,
+            CNI: req.body.CNI,
             nationality: req.body.nationality,
             sex: req.body.sex,
-            state: req.body.state
+            state: req.body.state //non necessaire
         });
         const savePatientData = await newPatient.save();
         res.status(200).json(savePatientData);
@@ -70,8 +70,8 @@ module.exports.upadatePatient = async(req, res) => {
             message: 'Id  is incorrect'
         });
     try {
-        const patientData = await patientModel.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
-        res.status(200).json(patientData);
+        const patientData = await patientModel.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true }); // changer new
+        res.status(200).json(patientData); 
     } catch (error) {
         res.status(500).json({ message: error });
     }
@@ -88,7 +88,7 @@ module.exports.deletePatient = async(req, res) => {
         });
     try {
         const patientData = await patientModel.findByIdAndDelete({ _id: req.params.id });
-        res.status(200).json(patienData);
+        res.status(200).json(patientData); // patienData 
     } catch (error) {
         res.status(500).json({ message: error });
     }
