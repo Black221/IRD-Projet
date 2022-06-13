@@ -14,6 +14,11 @@ const PatientSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    numberPatient: {
+        type: String,
+        unique: true,
+        required: true
+    },
     dateOfBirth: {
         type: String,
         required: true
@@ -28,10 +33,7 @@ const PatientSchema = mongoose.Schema({
     },
     sex: {
         type: String,
-        enum: {
-            value: ['M', 'F'],
-            message : '{VALUE} is not supported'
-        }
+        enum: ['M', 'F']
     },
     state: {
         type: Boolean,

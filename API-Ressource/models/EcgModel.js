@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const EcgSchema = mongoose.Schema({
-    dataset: { // foreign key
+    dataset_name: { // foreign key
         type: String, 
         required: true
     },
@@ -13,7 +13,7 @@ const EcgSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    numberECG: {
+    numberEcg: {
         type: String,
         unique: true,
         required: true

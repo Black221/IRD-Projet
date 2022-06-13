@@ -27,13 +27,10 @@ const EcgMetadataSchema = mongoose.Schema({
         weight:{
             type: String
         },
-        sex:{
+        sex: {
             type: String,
-            enum: {
-                value: ['M', 'F'],
-                message : '{VALUE} is not supporter'
-            }  
-        }    
+            enum: ['M', 'F']
+        }
     }
 })
 
