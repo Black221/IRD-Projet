@@ -85,8 +85,8 @@ export class DatasetService {
         this.httpClient
             .post('http://localhost:3000/dataset', dataset)
             .subscribe(
-                () => {
-                    console.log('Dataset saved')
+                (dataset) => {
+                    console.log('Dataset saved'+dataset)
                 },
                 (error) => {
                     console.log('Dataset not saved'+error)
