@@ -161,9 +161,9 @@ figcaption {
 p {
     padding-top: 50%;
     margin: 0 auto;
-    width: 70%;
+    width: 95%;
     height: 100%;
-
+    text-align: justify;
     list-style: none;
     color: var(--white-1);
 

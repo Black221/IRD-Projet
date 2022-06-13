@@ -3,7 +3,7 @@
         <h3 class="">{{ecgNumber}}</h3>
         <div class="text-end text-light fs-4">
             <a href="{{filepath}}" class="link-light"><i class="fa-solid fa-eye me-4"></i></a>
-            <a routerLink="/platform/ecg/modify/:id" class="link-light"><i class="fa-solid fa-pen-to-square me-2"></i></a>
+            <a [routerLink]="'/platform/ecg/edit/'+[id]" class="link-light"><i class="fa-solid fa-pen-to-square me-2"></i></a>
         </div>
     </div>
     <div class="list-group-item-success p-4 pt-2">

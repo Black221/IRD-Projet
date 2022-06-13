@@ -26,7 +26,8 @@ import { AddPatientComponent } from './add-patient/add-patient.component';
 import { AddMedecinComponent } from './add-medecin/add-medecin.component';
 import {DatasetService} from "../services/dataset.service";
 import {EcgService} from "../services/ecg.service";
-import {DatasetEcgViewComponent} from "./dataset-ecg-view/dataset-ecg-view.component";
+import { EmptyComponent } from './empty/empty.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 // @ts-ignore
@@ -34,17 +35,25 @@ const appRoutes : Routes = [
     { path: 'platform', component: HistoryComponent},
     { path: 'platform/home', component: HistoryComponent},
     { path: 'platform/dataset', component: DatasetComponent},
-    { path: 'platform/dataset/:id', component: SpecificDatasetComponent},
+    { path: 'platform/dataset/add', component: AddDatasetComponent},
     { path: 'platform/ecg', component: DatasetEcgComponent},
-    { path: 'platform/ecg/:id', component: SpecificEcgComponent},
+    { path: 'platform/ecg/add', component: AddEcgComponent},
     { path: 'platform/patient', component: PatientComponent},
-    { path: 'platform/patient/:id', component: PatientComponent},
     { path: 'platform/medecin', component: MedecinComponent},
+    { path: 'platform/medecin/add', component: AddMedecinComponent},
+    { path: 'platform/patient/add', component: AddPatientComponent},
+];
+
+const secondRoutes: Routes = [
+    { path: 'platform/dataset/edit/:id', component: AddDatasetComponent},
+    { path: 'platform/ecg/edit/:id', component: AddEcgComponent},
+    { path: 'platform/medecin/edit/:id', component: AddMedecinComponent},
+    { path: 'platform/patient/edit/:id', component: AddMedecinComponent},
+    { path: 'platform/ecg/:id', component: SpecificEcgComponent},
+    { path: 'platform/patient/:id', component: PatientComponent},
+    { path: 'platform/dataset/:id', component: SpecificDatasetComponent},
     { path: 'platform/medecin/:id', component: MedecinComponent},
-    { path: 'platform/add/dataset', component: AddDatasetComponent},
-    { path: 'platform/add/ecg', component: AddEcgComponent},
-    { path: 'platform/edit/dataset/:id', component: AddDatasetComponent},
-    { path: 'platform/edit/ecg/:id', component: AddEcgComponent}
+
 ];
 
 @NgModule({
@@ -71,11 +80,13 @@ const appRoutes : Routes = [
         AddDatasetComponent,
         AddPatientComponent,
         AddMedecinComponent,
-        DatasetEcgViewComponent
+        EmptyComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),
-        BrowserModule
+        RouterModule.forChild(secondRoutes),
+        BrowserModule,
+        ReactiveFormsModule
     ],
     providers: [
         DatasetService,

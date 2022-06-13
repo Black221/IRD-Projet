@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DatasetEcgViewComponent } from './dataset-ecg-view.component';
+import { EmptyComponent } from './empty.component';
 
-describe('DatasetEcgViewComponent', () => {
-  let component: DatasetEcgViewComponent;
-  let fixture: ComponentFixture<DatasetEcgViewComponent>;
+describe('EmptyComponent', () => {
+  let component: EmptyComponent;
+  let fixture: ComponentFixture<EmptyComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DatasetEcgViewComponent ]
+      declarations: [ EmptyComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DatasetEcgViewComponent);
+    fixture = TestBed.createComponent(EmptyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

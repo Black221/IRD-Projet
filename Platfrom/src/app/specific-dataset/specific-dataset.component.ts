@@ -13,6 +13,7 @@ export class SpecificDatasetComponent implements OnInit {
     @Input() name = "Covid-19";
     ecgs: any[] | undefined;
     ecgSubscription: Subscription | undefined;
+    numberOfECG = 0;
     constructor(private ecgService: EcgService,
                 private datasetService: DatasetService,
                 private route: ActivatedRoute) {
@@ -22,6 +23,8 @@ export class SpecificDatasetComponent implements OnInit {
         const id = this.route.snapshot.params['id'];
         // @ts-ignore
         this.name= this.datasetService.getDatasetById(+id).name;
+        // @ts-ignore
+        this.numberOfECG = this.ecgService.getNumberOfECG(this.name);
         // @ts-ignore
         this.ecgSubscription = this.ecgService.ecgSubject.subscribe(
             (ecgs: any[]) => {

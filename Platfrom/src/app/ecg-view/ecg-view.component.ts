@@ -11,13 +11,17 @@ export class EcgViewComponent implements OnInit {
     @Input() last_update_at: any;
     @Input() name = "ECGName";
     @Input() dataset: any;
-    @Input() dataset_r: Date | string | undefined | null;
+    @Input() dataset_r:  string | undefined | null;
     @Input() last_updated_at: any;
     @Input() id = 0;
+    @Input() ecgCount = 0;
 
   constructor() { }
 
   ngOnInit(): void {
+      if (this.dataset === this.dataset_r) {
+          this.ecgCount ++;
+      }
   }
 
 }

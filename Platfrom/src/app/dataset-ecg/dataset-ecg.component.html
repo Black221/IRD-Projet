@@ -1,3 +1,32 @@
-<div class="container mb-4">
-    <app-dataset-ecg-view></app-dataset-ecg-view>
+<div class="container d-flex justify-content-between mb-4">
+    <div class="filter">
+        <form action="" class="d-flex">
+            <select class="form-select dropdown" name="" id="">
+                <option value="">--Filter--</option>
+                <option value="name">Name</option>
+                <option value="created_at">Creation date</option>
+                <option value="last_update">Last update</option>
+                <option value="number_of_ecg">Number of ecg</option>
+            </select>
+            <button class="btn btn-link text-success fs-5" role="submit"><i class="fa-solid fa-rotate-right"></i></button>
+        </form>
+    </div>
+    <div class="addDataset">
+        <a routerLink="/platform/ecg/add" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add ECG</a>
+    </div>
+</div>
+<div class="container mb-4" *ngFor="let dataset of datasets">
+    <h2>{{dataset.name}}</h2>
+    <div class="p-4">
+        <app-ecg-view *ngFor="let ecg of ecgs"
+                      [dataset_r] = "dataset.name"
+                      [name] = "ecg.number"
+                      [dataset] = "ecg.dataset_name"
+                      [last_updated_at] = "ecg.last_update_at"
+                      [last_view_at]="ecg.last_view"
+                      [id] = "ecg.id"
+        >
+        </app-ecg-view>
+    </div>
+    <app-empty *ngIf="dataset.numberOfECG === 0"></app-empty>
 </div>

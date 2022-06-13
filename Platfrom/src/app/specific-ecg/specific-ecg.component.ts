@@ -26,12 +26,14 @@ export class SpecificEcgComponent implements OnInit {
     last_update_at = "10/12/2021 10:15";
     filepath: any;
     filename: any;
+    id = 0;
     constructor(private ecgService: EcgService,
                 private route: ActivatedRoute) {
     }
 
   ngOnInit(): void {
       const id = this.route.snapshot.params['id'];
+      this.id = id;
       // @ts-ignore
       this.ecgNumber= this.ecgService.getEcgtById(+id).number;
       // @ts-ignore
@@ -48,6 +50,7 @@ export class SpecificEcgComponent implements OnInit {
       this.filepath = this.ecgService.getEcgtById(+id).filepath;
       // @ts-ignore
       this.filename = this.ecgService.getEcgtById(+id).filename;
+
   }
 
 }

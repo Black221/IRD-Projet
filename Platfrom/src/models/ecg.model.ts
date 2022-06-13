@@ -1,6 +1,14 @@
 export class Ecg {
+    public id: number | undefined;
+    public number: string | undefined;
+    // @ts-ignore
+    public created_at: Date;
+    // @ts-ignore
+    public last_update_at: Date;
+    // @ts-ignore
+    public last_view: Date;
 
-    constructor(public datasetName: string,
+    constructor(public dataset_name: string,
                 public filename: string,
                 public filepath: string,
                 public recording: {

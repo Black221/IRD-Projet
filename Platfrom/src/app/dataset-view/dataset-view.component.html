@@ -19,7 +19,7 @@
                 <div class="img-bg"></div>
             </figure>
             <div class="position-absolute top-0 text-end p-5">
-                <a class="link-light fs-2 text-decoration-none" routerLink="/platform/edit/dataset/:id"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a class="link-light fs-2 text-decoration-none" [routerLink]="'/platform/dataset/edit/'+id"><i class="fa-solid fa-pen-to-square"></i></a>
             </div>
             <button role="link" ><a class="text-decoration-none link-light" [routerLink]="[id]">See ECG</a></button>
             <div class="design-container">

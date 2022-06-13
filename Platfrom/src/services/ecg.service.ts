@@ -3,7 +3,7 @@ import {Subject} from "rxjs";
 import {formatDate} from "@angular/common";
 
 export class EcgService {
-    private ecgs = [
+    private ecgs: Ecg[] = [
         {
             id: 1,
             dataset_name : "Covid-19",
@@ -137,6 +137,15 @@ export class EcgService {
         // @ts-ignore
         this.ecgs.push(ecg);
         this.emitEcgSubject();
+    }
+
+    getNumberOfECG(dataset: string) {
+        let count = 0;
+        for (const ecg of this.ecgs) {
+            if (ecg.dataset_name == dataset)
+                count ++;
+        }
+        return count;
     }
 
 
