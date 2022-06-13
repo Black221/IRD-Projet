@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {UpperCasePipe} from "@angular/common";
 
 @Component({
   selector: 'app-empty',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./empty.component.css']
 })
 export class EmptyComponent implements OnInit {
+    // @ts-ignore
+    @Input() entity: any = "ecg";
 
   constructor() { }
 

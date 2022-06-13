@@ -28,10 +28,13 @@ import {DatasetService} from "../services/dataset.service";
 import {EcgService} from "../services/ecg.service";
 import { EmptyComponent } from './empty/empty.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 
 // @ts-ignore
 const appRoutes : Routes = [
+    { path: '', component: AuthComponent},
     { path: 'platform', component: HistoryComponent},
     { path: 'platform/home', component: HistoryComponent},
     { path: 'platform/dataset', component: DatasetComponent},
@@ -80,12 +83,14 @@ const secondRoutes: Routes = [
         AddDatasetComponent,
         AddPatientComponent,
         AddMedecinComponent,
-        EmptyComponent
+        EmptyComponent,
+        NavBarComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),
         RouterModule.forChild(secondRoutes),
         BrowserModule,
+        HttpClientModule,
         ReactiveFormsModule
     ],
     providers: [

@@ -6,16 +6,17 @@ const express = require('express');
 const routeForEcg = require('./routes/route.ecg');
 const routeForPatient = require('./routes/route.patient');
 const routeForMedicalStaff = require('./routes/route.medicalStaff');
-const routeForDataset = require('./routes/route.dataset');
+const routeForDataset = require('./routes/dataset.route');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 /**
  * middlewares
  */
 app.use(bodyParser.json());
-
+app.use(cors('http://localhost:4200'));
 app.use('/ecg', routeForEcg);
 app.use('/patient', routeForPatient);
 app.use('/medicalStaff', routeForMedicalStaff);

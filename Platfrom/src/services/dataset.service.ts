@@ -1,9 +1,14 @@
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Dataset} from "../models/dataset.model";
+import {HttpClient} from "@angular/common/http";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class DatasetService {
 
     datasetSubject = new Subject<any[]>();
+    // @ts-ignore
+    private datasetsOnServer: Observable<Object> = [];
     private datasets: Dataset[] = [
         {
             id: 1,
@@ -38,6 +43,8 @@ export class DatasetService {
         },
     ];
 
+    constructor(private httpClient: HttpClient) {
+    }
     emitDatasetSubject() {
         this.datasetSubject.next(this.datasets.slice())
     }
@@ -70,5 +77,24 @@ export class DatasetService {
         // @ts-ignore
         this.datasets.push(newDataset);
         this.emitDatasetSubject();
+        this.saveDatasetToServer(newDataset);
+    }
+
+    saveDatasetToServer (dataset: Dataset) {
+        // @ts-ignore
+        this.httpClient
+            .post('http://localhost:3000/dataset', dataset)
+            .subscribe(
+                () => {
+                    console.log('Dataset saved')
+                },
+                (error) => {
+                    console.log('Dataset not saved'+error)
+                }
+            );
+    }
+
+    getDatasetToServer () {
+        this.datasetsOnServer = this.httpClient.get('http://localhost:3000')
     }
 }

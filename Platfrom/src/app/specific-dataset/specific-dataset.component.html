@@ -1,3 +1,4 @@
+<app-nav-bar></app-nav-bar>
 <div class="container">
     <h2>{{name}}</h2>
     <app-ecg-view *ngFor="let ecg of ecgs"
@@ -9,6 +10,6 @@
                   [id] = "ecg.id"
     >
     </app-ecg-view>
-    <app-empty *ngIf="numberOfECG === 0"></app-empty>
+    <app-empty *ngIf="numberOfECG === 0" [entity]="'ecg'"></app-empty>
 
 </div>

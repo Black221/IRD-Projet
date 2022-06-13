@@ -23,7 +23,7 @@ const MedicalStaffSchema = mongoose.Schema({
     },
     sex: {
         type: String,
-        enum: ['M', 'F']
+        enum: ['M', 'F'],
     },
     login: {
         type: String,
@@ -39,7 +39,7 @@ const MedicalStaffSchema = mongoose.Schema({
     },
     permission: {
         type: String,
-        enum: ['admin', 'special', 'user']
+        enum: ['admin', 'special', 'user'],
     },
     state: {
         type: Boolean,
