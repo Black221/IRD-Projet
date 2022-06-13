@@ -1,11 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-const PatientSchema = mongoose.Schema({
-    // doctor_id: { // foreign key
-    //     type: String,
-    //     required: true
-    // },
-    // Apres avoir coder API_auth
+const MedicalStaffSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -14,25 +9,44 @@ const PatientSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    numberPatient: {
-        type: String,
-        unique: true,
-    },
     dateOfBirth: {
         type: String,
         required: true
     },
-    CNI: {
+    cni: {
         type: String,
         minLength: 13,
         maxLength: 13
     },
     nationality: {
-        type: String
+        type: String,
     },
     sex: {
         type: String,
-        enum: ['M', 'F']
+        // enum: {
+        //     value: ['M', 'F'],
+        //     message: '{VALUE} is not supported'
+        // }
+    },
+    numberMedicalStaff: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    profession: {
+        type: String,
+        required: true
+    },
+    permission: {
+        type: String,
+        // enum: {
+        //     value: ['admin', 'special', 'user'],
+        //     message: '{VALUE} is not supported'
+        // }
     },
     address: {
         country: {
@@ -48,16 +62,9 @@ const PatientSchema = mongoose.Schema({
             required: true
         }
     },
-    phone: {
-        type: String,
-        required: true
-
-    },
     state: {
         type: Boolean,
         default: true
     }
-
-})
-
-module.exports = mongoose.model('Patient', PatientSchema)
+});
+module.exports = mongoose.model('MedicalStaff', MedicalStaffSchema)
