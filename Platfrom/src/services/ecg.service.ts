@@ -18,6 +18,7 @@ export class EcgService {
                 end: "08:38"
             },
             patient : {
+                id: 1,
                 age : "45",
                 height : "17",
                 weight : "18",
@@ -38,6 +39,7 @@ export class EcgService {
                 end: "10:17"
             },
             patient : {
+                id: 1,
                 age : "45",
                 height : "17",
                 weight : "17",
@@ -58,6 +60,7 @@ export class EcgService {
                 end: "10:10"
             },
             patient : {
+                id: 2,
                 age : "15",
                 height : "15",
                 weight : "15",
@@ -78,6 +81,7 @@ export class EcgService {
                 end: "10:10"
             },
             patient : {
+                id: 3,
                 age : "14",
                 height : "14",
                 weight : "14",
@@ -98,6 +102,7 @@ export class EcgService {
                 end: "10:30"
             },
             patient : {
+                id: 1,
                 age : "13",
                 height : "13",
                 weight : "13",
@@ -118,6 +123,7 @@ export class EcgService {
                 end: "10:15"
             },
             patient : {
+                id: 1,
                 age : "12",
                 height : "12",
                 weight : "12",

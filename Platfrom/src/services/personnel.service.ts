@@ -1,4 +1,4 @@
-export class Personnel {
+export class PersonnelService {
 
     constructor(public firstname: string,
                 public lastname: string,

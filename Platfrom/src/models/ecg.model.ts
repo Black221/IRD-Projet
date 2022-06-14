@@ -16,6 +16,7 @@ export class Ecg {
                     end: string
                 },
                 public patient : {
+                    id: number
                     age : string,
                     height : string,
                     weight : string,

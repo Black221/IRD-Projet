@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {EcgService} from "../../services/ecg.service";
 import {DatasetService} from "../../services/dataset.service";
@@ -10,6 +10,8 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./specific-ecg.component.css']
 })
 export class SpecificEcgComponent implements OnInit {
+
+    @Input() link = "/platform/ecg";
     ecgNumber = "ECGId";
     patientNumber = "PatientId";
     recording = {

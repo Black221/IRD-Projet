@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Subscription} from "rxjs";
 import {DatasetService} from "../../services/dataset.service";
+import {Dataset} from "../../models/dataset.model";
 
 @Component({
   selector: 'app-dataset',
@@ -9,7 +10,7 @@ import {DatasetService} from "../../services/dataset.service";
 })
 export class DatasetComponent implements OnInit {
 
-    datasets: any[] | undefined;
+    datasets: Dataset[] | undefined;
     datasetSubscription: Subscription | undefined;
 
     constructor(private datasetService: DatasetService) {
@@ -18,7 +19,7 @@ export class DatasetComponent implements OnInit {
 
     ngOnInit () {
         this.datasetSubscription = this.datasetService.datasetSubject.subscribe(
-            (datasets: any[]) => {
+            (datasets: Dataset[]) => {
                 this.datasets = datasets;
             }
         );

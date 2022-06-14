@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MedecinComponent } from './medecin.component';
+import { BackLinkComponent } from './back-link.component';
 
-describe('MedecinComponent', () => {
-  let component: MedecinComponent;
-  let fixture: ComponentFixture<MedecinComponent>;
+describe('BackLinkComponent', () => {
+  let component: BackLinkComponent;
+  let fixture: ComponentFixture<BackLinkComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MedecinComponent ]
+      declarations: [ BackLinkComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MedecinComponent);
+    fixture = TestBed.createComponent(BackLinkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

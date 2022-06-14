@@ -1,9 +1,9 @@
-<a *ngIf="dataset === dataset_r" [routerLink]="'/platform/ecg/'+[id]"  class="list-group-item list-group-item-success mb-2" aria-current="true">
+<a [routerLink]="'/platform/ecg/'+[ecg.id]"  class="list-group-item list-group-item-success mb-2" aria-current="true">
     <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">{{name}}</h5>
-        <small class="text-muted ">Seen at :{{last_view_at}}</small>
+        <h5 class="mb-1">{{ecg.number}}</h5>
+        <small class="text-muted ">Seen at :{{ecg.last_view}}</small>
     </div>
-    <p class="mb-1">Description : {{description}}</p>
-    <small class="text-muted">last update :{{last_updated_at}}</small>
+    <p class="mb-1">Patient : {{patient.firstname+' '+patient.lastname+' '+patient.birthday}}</p>
+    <small class="text-muted">last update :{{ecg.last_update_at}}</small>
 </a>
 

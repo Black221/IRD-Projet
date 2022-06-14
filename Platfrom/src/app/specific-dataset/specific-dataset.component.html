@@ -1,15 +1,17 @@
 <app-nav-bar></app-nav-bar>
+<div class="container mt-lg-5">
+    <div class="p-3 bg-success d-flex justify-content-between text-light align-items-center">
+        <h2>{{dataset.name}}</h2>
+        <div class="fs-5">
+            <a class="mx-2 link-info" routerLink="/platform/dataset/ecg/{{dataset.id}}"><i class="fa-solid fa-eye"></i></a>
+            <a class="mx-2 link-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+            <a class="mx-2 link-danger"><i class="fa-solid fa-trash-can"></i></a>
+        </div>
+    </div>
+    <div class="container p-5 mb-4 bg-opacity-50">
+        {{dataset.description}}
+    </div>
+</div>
 <div class="container">
-    <h2>{{name}}</h2>
-    <app-ecg-view *ngFor="let ecg of ecgs"
-                  [dataset_r] = "name"
-                  [name] = "ecg.number"
-                  [dataset] = "ecg.dataset_name"
-                  [last_updated_at] = "ecg.last_update_at"
-                  [last_view_at]="ecg.last_view"
-                  [id] = "ecg.id"
-    >
-    </app-ecg-view>
-    <app-empty *ngIf="numberOfECG === 0" [entity]="'ecg'"></app-empty>
-
+    <app-back-link [link] = "link" ></app-back-link>
 </div>

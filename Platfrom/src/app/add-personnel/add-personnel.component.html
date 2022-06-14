@@ -1,7 +1,7 @@
 <app-nav-bar></app-nav-bar>
 <div class="container d-flex align-items-center flex-column">
-    <h3 class="bg-success  text-center col-6 p-3 mt-4 text-light" style="border-radius: 20px 20px 0 0">Add Personnel</h3>
-    <form class="row g-3 col-6 p-3 bg-success bg-opacity-25">
+    <h3 class="bg-success  text-center col-12 p-3 mt-4 text-light" >Add Personnel</h3>
+    <form class="row g-3 col-12 p-3 bg-success bg-opacity-25">
         <div class="form-floating col-md-7">
             <input type="email" class="form-control" id="firstname" placeholder="">
             <label for="firstname" class="form-label">Firstname</label>
@@ -46,8 +46,9 @@
             <input type="text" class="form-control" id="profession" placeholder="">
             <label for="profession" class="form-label">Profession</label>
         </div>
-        <div class="form-floating col-12 text-center">
-            <button type="submit" class="btn btn-success p-2 px-3 fs-5">Sign in</button>
+        <div class="col-12 d-flex justify-content-between">
+            <app-back-link [link]="'/platform/personnel'"></app-back-link>
+            <button type="submit" class="btn btn-success p-2 px-3 fs-5">Save</button>
         </div>
     </form>
 </div>

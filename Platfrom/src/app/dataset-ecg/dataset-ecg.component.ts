@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Subscription} from "rxjs";
 import {DatasetService} from "../../services/dataset.service";
 import {EcgService} from "../../services/ecg.service";
+import {Ecg} from "../../models/ecg.model";
+import {Dataset} from "../../models/dataset.model";
 
 @Component({
   selector: 'app-dataset-ecg',
@@ -9,10 +11,9 @@ import {EcgService} from "../../services/ecg.service";
   styleUrls: ['./dataset-ecg.component.css']
 })
 export class DatasetEcgComponent implements OnInit {
-    datasets: any[] | undefined;
+    datasets: Dataset[] | undefined;
     datasetSubscription: Subscription | undefined;
-    ecgs: any[] | undefined;
-    ecgCount = 0;
+    ecgs: Ecg[] | undefined;
     ecgSubscription: Subscription | undefined;
 
     constructor(private datasetService: DatasetService,
@@ -21,13 +22,13 @@ export class DatasetEcgComponent implements OnInit {
 
     ngOnInit () {
         this.datasetSubscription = this.datasetService.datasetSubject.subscribe(
-            (datasets: any[]) => {
+            (datasets: Dataset[]) => {
                 this.datasets = datasets;
             }
         );
         this.datasetService.emitDatasetSubject();
         this.ecgSubscription = this.ecgService.ecgSubject.subscribe(
-            (ecgs: any[]) => {
+            (ecgs: Ecg[]) => {
                 this.ecgs = ecgs;
             }
         );

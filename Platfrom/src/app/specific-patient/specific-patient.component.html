@@ -1,0 +1,55 @@
+<app-nav-bar></app-nav-bar>
+<div class="container">
+    <div class="col-xxl-8 mb-5 mb-xxl-0">
+        <div class="bg-secondary-soft px-4 py-5 rounded">
+            <div class="bg-success mb-4 mt-0 d-flex justify-content-between p-3 text-light">
+                <h4 class="">{{patient.firstname+' '+patient.lastname}}</h4>
+                <div class="fs-5">
+                    <a class="mx-2 link-info" routerLink="/platform/patient/ecg/{{patient.id}}"><i class="fa-solid fa-eye"></i></a>
+                    <a class="mx-2 link-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a class="mx-2 link-danger"><i class="fa-solid fa-trash-can"></i></a>
+                </div>
+            </div>
+            <div class="row g-3 p-4 pt-2">
+                <!-- Phone number -->
+                <div class="col-md-5">
+                    <label class="form-label fw-bold">Phone number </label>
+                    <div type="text" class="form-control">{{patient.phone}}</div>
+                </div>
+                <!-- Birthday -->
+                <div class="col-md-5">
+                    <label class="form-label  fw-bold">Birthday</label>
+                    <div type="text" class="form-control">{{patient.birthday}}</div>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label  fw-bold">Sex</label>
+                    <div type="text" class="form-control">{{patient.sex}}</div>
+                </div>
+                <!-- Skype -->
+                <div class="col-md-6">
+                    <label class="form-label  fw-bold">Nationality </label>
+                    <div type="text" class="form-control">{{patient.nationality}}</div>
+                </div>
+                <!-- Sex-->
+                <div class="col-md-6">
+                    <label class="form-label  fw-bold">CNI</label>
+                    <div type="text" class="form-control">{{patient.cni}}</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label  fw-bold">Address</label>
+                    <div type="text" class="form-control">{{patient.address.address}}</div>
+                </div>
+                <!-- Birthday -->
+                <div class="col-md-4">
+                    <label class="form-label  fw-bold">City</label>
+                    <div type="text" class="form-control">{{patient.address.city}}</div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label  fw-bold">Country</label>
+                    <div type="text" class="form-control">{{patient.address.country}}</div>
+                </div>
+            </div> <!-- Row END -->
+        </div>
+        <app-back-link [link] = "link" ></app-back-link>
+    </div>
+</div>

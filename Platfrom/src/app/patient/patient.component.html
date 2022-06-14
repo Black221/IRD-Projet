@@ -1,27 +1,31 @@
 <app-nav-bar></app-nav-bar>
 <div class="container d-flex justify-content-between mb-4">
-    <div class="filter">
-        <form action="" class="d-flex">
-            <select class="form-select dropdown" name="" id="">
-                <option value="">--Filter--</option>
-                <option value="name">Name</option>
-                <option value="created_at">Creation date</option>
-                <option value="last_update">Last update</option>
-                <option value="number_of_ecg">Number of ecg</option>
-            </select>
-            <button class="btn btn-link text-success fs-5" role="submit"><i class="fa-solid fa-rotate-right"></i></button>
-        </form>
-    </div>
+    <h2>Patients</h2>
     <div class="addDataset">
         <a routerLink="/platform/patient/add" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add Patient</a>
     </div>
 </div>
-<div class="container d-flex flex-wrap justify-content-center">
-    <app-patient-view></app-patient-view>
-    <app-patient-view></app-patient-view>
-    <app-patient-view></app-patient-view>
-    <app-patient-view></app-patient-view>
-    <app-patient-view></app-patient-view>
-    <app-patient-view></app-patient-view>
-    <app-patient-view></app-patient-view>
+<div class="container my-4">
+    <div class="table-responsive table">
+        <div class="justify-content-between d-flex fw-bold col-12 py-2">
+            <div style="width: 15px">#</div>
+            <div style="width: 50px">Id</div>
+            <div class="col-4 ">Firstname</div>
+            <div class="col-2">Lastname</div>
+            <div class="col-2">Birthday</div>
+            <div class="" style="width: 50px">Sex</div>
+            <div class="col-1">Actions</div>
+        </div>
+        <div class="body list-group">
+            <app-patient-view *ngFor="let patient of patients"
+                              [firstname]="patient.firstname"
+                              [lastname]="patient.lastname"
+                              [birthday]="patient.birthday"
+                              [sex]="patient.sex"
+                              [id] ="patient.id"
+            ></app-patient-view>
+        </div>
+    </div>
 </div>
+
+

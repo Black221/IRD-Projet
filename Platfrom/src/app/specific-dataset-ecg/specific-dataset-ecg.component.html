@@ -1,0 +1,21 @@
+<app-nav-bar></app-nav-bar>
+<div class="container mt-lg-5">
+    <div class="p-3 bg-success d-flex align-content-center justify-content-between text-light">
+        <h2>{{dataset.name}}</h2>
+        <div class="fs-2">
+            <a routerLink="/platform/dataset/ecg/{{dataset.id+'/'+previous}}" class="link-light mx-3"><i class="fa-solid fa-arrow-left"></i></a>
+            <a routerLink="/platform/dataset/ecg/{{dataset.id+'/'+next}}" class="link-light mx-3"><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+    <div class="container mt-lg-2">
+        <div *ngFor="let ecg of ecgs">
+            <app-ecg-view *ngIf="dataset.name === ecg.dataset_name"
+                        [ecg]="ecg"
+            ></app-ecg-view>
+        </div>
+    </div>
+
+</div>
+<div class="container">
+    <app-back-link [link] = "link" ></app-back-link>
+</div>
