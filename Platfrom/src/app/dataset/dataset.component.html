@@ -1,19 +1,19 @@
 <app-nav-bar></app-nav-bar>
 <div class="d-flex justify-content-center" style="flex-wrap: wrap">
-    <div class="container d-flex justify-content-between mb-4">
-        <div class="filter">
-            <form action="" class="d-flex">
-                <select class="form-select dropdown" name="" id="">
-                    <option value="">--Filter--</option>
-                    <option value="name">Name</option>
-                    <option value="created_at">Creation date</option>
-                    <option value="last_update">Last update</option>
-                    <option value="number_of_ecg">Number of ecg</option>
-                </select>
-            </form>
-        </div>
-        <div class="addDataset">
-            <a routerLink="/platform/dataset/add" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add Dataset</a>
+    <div class="container d-flex align-content-center justify-content-between  bg-success p-3 mb-4">
+        <form action="" class=" mx-4 d-flex">
+            <select class="form-select dropdown">
+                <option value="">--Filter--</option>
+                <option value="name">Name</option>
+                <option value="created_at">Creation date</option>
+                <option value="last_update">Last update</option>
+                <option value="number_of_ecg">Number of ecg</option>
+            </select>
+        </form>
+        <div class="">
+            <a routerLink="/platform/ecg/add" class="link-light fs-3 mx-4"><i class="fa-solid fa-plus"></i></a>
+            <a routerLink="/platform/ecg/page/{{previous}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-left"></i></a>
+            <a routerLink="/platform/ecg/page/{{next}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-right"></i></a>
         </div>
     </div>
     <app-dataset-view

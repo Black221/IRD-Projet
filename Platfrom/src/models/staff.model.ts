@@ -1,6 +1,8 @@
-export class PersonnelService {
+export class Staff {
 
-    constructor(public firstname: string,
+    constructor(public id:number,
+                public sex:string,
+                public firstname: string,
                 public lastname: string,
                 public email: string,
                 public cni: string,
@@ -10,4 +12,5 @@ export class PersonnelService {
                 public password: string,
                 public profession: string) {
     }
+
 }

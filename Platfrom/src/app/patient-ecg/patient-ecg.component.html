@@ -1,35 +1,27 @@
 <app-nav-bar></app-nav-bar>
 <div class="container">
-    <h2 class="mb-lg-4 bg-success p-3 text-light">{{patient.firstname+' '+patient.lastname}}</h2>
-    <div class="container d-flex justify-content-between mb-4">
-        <div class="filter">
-            <form action="" class="d-flex">
-                <select class="form-select dropdown" name="" id="">
-                    <option value="">--Filter--</option>
-                    <option value="name">Name</option>
-                    <option value="created_at">Creation date</option>
-                    <option value="last_update">Last update</option>
-                    <option value="number_of_ecg">Number of ecg</option>
-                </select>
-                <button class="btn btn-link text-success fs-5" role="submit"><i class="fa-solid fa-rotate-right"></i></button>
-            </form>
-        </div>
-        <div class="addDataset">
-            <a routerLink="/platform/ecg/add" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add ECG</a>
+    <div class="container d-flex align-content-center justify-content-between  bg-success p-3 px-4">
+        <h2 class="bg-success text-light">{{patient.firstname+' '+patient.lastname}}</h2>
+        <form action="" class=" mx-4 d-flex">
+            <select class="form-select dropdown">
+                <option value="">--Filter--</option>
+                <option value="name">Name</option>
+                <option value="created_at">Creation date</option>
+                <option value="last_update">Last update</option>
+                <option value="number_of_ecg">Number of ecg</option>
+            </select>
+        </form>
+        <div class="">
+            <a routerLink="/platform/ecg/add" class="link-light fs-3 mx-4"><i class="fa-solid fa-plus"></i></a>
+            <a routerLink="/platform/ecg/page/{{previous}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-left"></i></a>
+            <a routerLink="/platform/ecg/page/{{next}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-right"></i></a>
         </div>
     </div>
-    <hr>
-    <div class="container">
-        <div class="container mb-4" *ngFor="let dataset of datasets">
-            <div *ngIf="haveThisDataset(dataset.name)">
-                <h2>{{dataset.name}}</h2>
-                <div class="container" *ngFor="let ecg of ecgs">
-                    <app-ecg-view *ngIf="patient.id === ecg.patient.id"
-                                 [ecg]="ecg"
-                    >
-                    </app-ecg-view>
-                </div>
-            </div>
+    <div class="container mt-3">
+        <div class="container" *ngFor="let ecg of ecgs">
+            <app-ecg-view *ngIf="patient.id === ecg.patient.id"
+                         [ecg]="ecg"
+            ></app-ecg-view>
         </div>
     </div>
     <app-back-link [link] = "link" ></app-back-link>

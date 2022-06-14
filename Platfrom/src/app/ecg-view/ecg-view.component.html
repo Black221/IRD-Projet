@@ -3,7 +3,9 @@
         <h5 class="mb-1">{{ecg.number}}</h5>
         <small class="text-muted ">Seen at :{{ecg.last_view}}</small>
     </div>
-    <p class="mb-1">Patient : {{patient.firstname+' '+patient.lastname+' '+patient.birthday}}</p>
+    <div class="d-flex w-100 justify-content-between">
+        <p class="mb-1">Patient : {{patient.firstname+' '+patient.lastname+' '+patient.birthday}}</p>
+        <p class="mb-1">{{ecg.dataset_name}}</p>
+    </div>
     <small class="text-muted">last update :{{ecg.last_update_at}}</small>
 </a>
-

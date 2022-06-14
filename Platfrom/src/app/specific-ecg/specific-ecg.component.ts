@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Subscription} from "rxjs";
 import {EcgService} from "../../services/ecg.service";
-import {DatasetService} from "../../services/dataset.service";
 import {ActivatedRoute} from "@angular/router";
+import {Ecg} from "../../models/ecg.model";
+import {Patient} from "../../models/patient.model";
+import {PatientService} from "../../services/patient.service";
 
 @Component({
   selector: 'app-specific-ecg',
@@ -12,47 +13,21 @@ import {ActivatedRoute} from "@angular/router";
 export class SpecificEcgComponent implements OnInit {
 
     @Input() link = "/platform/ecg";
-    ecgNumber = "ECGId";
-    patientNumber = "PatientId";
-    recording = {
-        start : "",
-        end : ""
-    };
-    patient = {
-        age: 15,
-        height: "180",
-        weight: "60",
-        sex: "M"
-    }
-    created_at = "10/12/2021 10:15";
-    last_update_at = "10/12/2021 10:15";
-    filepath: any;
-    filename: any;
-    id = 0;
+    // @ts-ignore
+    ecg: Ecg;
+    // @ts-ignore
+    patient: Patient;
     constructor(private ecgService: EcgService,
+                private patientService: PatientService,
                 private route: ActivatedRoute) {
     }
 
   ngOnInit(): void {
       const id = this.route.snapshot.params['id'];
-      this.id = id;
       // @ts-ignore
-      this.ecgNumber= this.ecgService.getEcgtById(+id).number;
+      this.ecg = this.ecgService.getEcgtById(+id);
       // @ts-ignore
-      this.patientNumber =this.ecgService.getEcgtById(+id).patientNumber ;
-      // @ts-ignore
-      this.recording = this.ecgService.getEcgtById(+id).recording;
-      // @ts-ignore
-      this.patient = this.ecgService.getEcgtById(+id).patient;
-      // @ts-ignore
-      this.created_at = this.ecgService.getEcgtById(+id).created_at;
-      // @ts-ignore
-      this.last_update_at = this.ecgService.getEcgtById(+id).last_update_at;
-      // @ts-ignore
-      this.filepath = this.ecgService.getEcgtById(+id).filepath;
-      // @ts-ignore
-      this.filename = this.ecgService.getEcgtById(+id).filename;
-
+      this.patient = this.patientService.getPatientById(+this.ecg.patient.id);
   }
 
 }

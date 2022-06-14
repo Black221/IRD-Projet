@@ -12,6 +12,8 @@ export class DatasetComponent implements OnInit {
 
     datasets: Dataset[] | undefined;
     datasetSubscription: Subscription | undefined;
+    previous: any;
+    next: any;
 
     constructor(private datasetService: DatasetService) {
 

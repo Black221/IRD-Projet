@@ -15,6 +15,10 @@ export class DatasetEcgComponent implements OnInit {
     datasetSubscription: Subscription | undefined;
     ecgs: Ecg[] | undefined;
     ecgSubscription: Subscription | undefined;
+    // @ts-ignore
+    previous: number;
+    // @ts-ignore
+    next: number;
 
     constructor(private datasetService: DatasetService,
                 private ecgService: EcgService) {

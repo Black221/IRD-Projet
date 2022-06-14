@@ -1,34 +1,31 @@
 .stats{
     margin: 0;
-    padding: 50px;
+    padding: 0;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
     font-family: consolas, serif;
 }
-
-.stats .container{
-    position: relative;
-    display: flex;
-    justify-content: space-between;
+.stats:before, .stats:after{
+    margin: 0;
+    padding: 0;
 }
-
-.stats .container .card{
+.stats  .card{
+    margin: 10px;
     position: relative;
     cursor: pointer;
     border: none;
-    margin: 40px;
-    margin-top: 0;
     background: rgba(26, 138, 100, 0.2);
 }
 
-.stats .container .card .face{
-    width: 390px;
+.stats  .card .face{
+    width: 270px;
     height: 200px;
     transition: 0.5s;
 }
 
-.stats .container .card .face.face1{
+.stats  .card .face.face1{
     position: relative;
     background: rgb(25, 134, 84);
 
@@ -39,25 +36,25 @@
     transform: translateY(100px);
 }
 
-.stats .container .card:hover .face.face1{
+.stats  .card:hover .face.face1{
     background: #198654;
     transform: translateY(0);
 }
 
-.stats .container .card .face.face1 .content{
+.stats  .card .face.face1 .content{
     opacity: 0.9;
     transition: 0.5s;
 }
 
-.stats .container .card:hover .face.face1 .content{
+.stats  .card:hover .face.face1 .content{
     opacity: 1;
 }
 
-.stats .container .card .face.face1 .content img{
+.stats  .card .face.face1 .content img{
     max-width: 100px;
 }
 
-.stats .container .card .face.face1 .content h3{
+.stats  .card .face.face1 .content h3{
     margin: 10px 0 0;
     padding: 0;
     color: #fff;
@@ -65,7 +62,7 @@
     font-size: 1.5em;
 }
 
-.stats .container .card .face.face2{
+.stats  .card .face.face2{
     position: relative;
     background: #fff;
     display: flex;
@@ -77,16 +74,16 @@
     transform: translateY(-100px);
 }
 
-.stats .container .card:hover .face.face2{
+.stats  .card:hover .face.face2{
     transform: translateY(0);
 }
 
-.stats .container .card .face.face2 .content p{
+.stats  .card .face.face2 .content p{
     margin: 0;
     padding: 0;
 }
 
-.stats .container .card .face.face2 .content a{
+.stats  .card .face.face2 .content a{
     margin: 15px 0 0;
     display:  inline-block;
     text-decoration: none;
@@ -96,7 +93,7 @@
     border: 1px solid #333;
 }
 
-.stats .container .card .face.face2 .content a:hover{
+.stats  .card .face.face2 .content a:hover{
     background: #333;
     color: #fff;
 }

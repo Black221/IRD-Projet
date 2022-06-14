@@ -1,13 +1,13 @@
 <div class="presentation justify-content-between d-flex col-12 list-group-item bg-success bg-opacity-25">
     <div style="width: 15px"></div>
-    <div style="width: 50px">{{id}}</div>
-    <div class="col-4 ">{{firstname}}</div>
-    <div class="col-2">{{lastname}}</div>
-    <div class="col-2">{{birthday}}</div>
-    <div class="text-center" style="width: 50px">{{sex}}</div>
+    <div style="width: 50px">{{patient.id}}</div>
+    <div class="col-4 ">{{patient.firstname}}</div>
+    <div class="col-2">{{patient.lastname}}</div>
+    <div class="col-2">{{patient.birthday}}</div>
+    <div class="text-center" style="width: 50px">{{patient.sex}}</div>
     <div class="col-1 d-flex justify-content-between align-items-center">
-        <a [routerLink]="[id]"><i class="fa-solid fa-eye text-info"></i></a>
-        <a [routerLink]="'add/'+[id]"><i class="fa-solid text-warning fa-pen-to-square"></i></a>
-        <a [routerLink]="'edit/'+[id]"><i class="fa-solid fa-trash-can text-danger"></i></a>
+        <a [routerLink]="[patient.id]"><i class="fa-solid fa-eye text-info"></i></a>
+        <a [routerLink]="'add/'+[patient.id]"><i class="fa-solid text-warning fa-pen-to-square"></i></a>
+        <a [routerLink]="'edit/'+[patient.id]"><i class="fa-solid fa-trash-can text-danger"></i></a>
     </div>
 </div>

@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {ActivityModel} from "../../models/activity.model";
 
 @Component({
   selector: 'app-activity',
@@ -6,15 +7,15 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./activity.component.css']
 })
 export class ActivityComponent implements OnInit {
-    @Input() name = "ECG";
-    @Input() last_update_at = "10/12/2020 10:45";
-    @Input() last_view_at = "10/12/2020";
-    @Input() objectName = "EntityName";
+
 
     @Input() link = "ecg"
+    // @ts-ignore
+    @Input() activity: ActivityModel;
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

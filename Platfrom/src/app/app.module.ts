@@ -6,7 +6,7 @@ import { AuthComponent } from './auth/auth.component';
 import { EcgComponent } from './ecg/ecg.component';
 import { DatasetComponent } from './dataset/dataset.component';
 import { PatientComponent } from './patient/patient.component';
-import { PersonnelComponent } from './personnel/personnel.component';
+import { StaffComponent } from './staff/staff.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HistoryComponent } from './history/history.component';
@@ -16,7 +16,7 @@ import { SpecificEcgComponent } from './specific-ecg/specific-ecg.component';
 import { DatasetViewComponent } from './dataset-view/dataset-view.component';
 import { EcgViewComponent } from './ecg-view/ecg-view.component';
 import { PatientViewComponent } from './patient-view/patient-view.component';
-import { MedecinViewComponent } from './personnel-view/personnel-view.component';
+import { StaffViewComponent } from './staff-view/staff-view.component';
 import { DatasetEcgComponent } from './dataset-ecg/dataset-ecg.component';
 import { ActivityComponent } from './activity/activity.component';
 import { SpecificDatasetComponent } from './specific-dataset/specific-dataset.component';
@@ -31,11 +31,11 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import {PatientService} from "../services/patient.service";
-import { PersonnelService} from "../services/personnel.service";
 import { SpecificPatientComponent } from './specific-patient/specific-patient.component';
 import { PatientEcgComponent } from './patient-ecg/patient-ecg.component';
 import { BackLinkComponent } from './back-link/back-link.component';
 import { SpecificDatasetEcgComponent } from './specific-dataset-ecg/specific-dataset-ecg.component';
+import { SpecificStaffComponent } from './specific-staff/specific-staff.component';
 
 // @ts-ignore
 const appRoutes : Routes = [
@@ -47,8 +47,8 @@ const appRoutes : Routes = [
     { path: 'platform/ecg', component: DatasetEcgComponent},
     { path: 'platform/ecg/add', component: AddEcgComponent},
     { path: 'platform/patient', component: PatientComponent},
-    { path: 'platform/personnel', component: PersonnelComponent},
-    { path: 'platform/personnel/add', component: AddPersonnelComponent},
+    { path: 'platform/staff', component: StaffComponent},
+    { path: 'platform/staff/add', component: AddPersonnelComponent},
     { path: 'platform/patient/add', component: AddPatientComponent},
 ];
 
@@ -57,13 +57,13 @@ const secondRoutes: Routes = [
     { path: 'platform/dataset/ecg/:id', component: SpecificDatasetEcgComponent},
     { path: 'platform/dataset/edit/:id', component: AddDatasetComponent},
     { path: 'platform/ecg/edit/:id', component: AddEcgComponent},
-    { path: 'platform/personnel/edit/:id', component: AddPersonnelComponent},
+    { path: 'platform/staff/edit/:id', component: AddPersonnelComponent},
     { path: 'platform/patient/edit/:id', component: AddPersonnelComponent},
     { path: 'platform/ecg/:id', component: SpecificEcgComponent},
     { path: 'platform/patient/ecg/:id', component: PatientEcgComponent},
     { path: 'platform/patient/:id', component: SpecificPatientComponent},
     { path: 'platform/dataset/:id', component: SpecificDatasetComponent},
-    { path: 'platform/medecin/:id', component: PersonnelComponent},
+    { path: 'platform/staff/:id', component: StaffComponent},
 
 ];
 
@@ -75,7 +75,7 @@ const secondRoutes: Routes = [
         EcgComponent,
         DatasetComponent,
         PatientComponent,
-        PersonnelComponent,
+        StaffComponent,
         HeaderComponent,
         FooterComponent,
         HistoryComponent,
@@ -84,7 +84,7 @@ const secondRoutes: Routes = [
         DatasetViewComponent,
         EcgViewComponent,
         PatientViewComponent,
-        MedecinViewComponent,
+        StaffViewComponent,
         DatasetEcgComponent,
         ActivityComponent,
         SpecificDatasetComponent,
@@ -97,7 +97,8 @@ const secondRoutes: Routes = [
         SpecificPatientComponent,
         PatientEcgComponent,
         BackLinkComponent,
-        SpecificDatasetEcgComponent
+        SpecificDatasetEcgComponent,
+        SpecificStaffComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),

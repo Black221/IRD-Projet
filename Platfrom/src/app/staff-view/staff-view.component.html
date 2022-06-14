@@ -1,0 +1,13 @@
+<div class="presentation justify-content-between d-flex col-12 list-group-item bg-success bg-opacity-25">
+    <div style="width: 15px"></div>
+    <div style="width: 50px">{{staff.id}}</div>
+    <div class="col-4 ">{{staff.firstname}}</div>
+    <div class="col-2">{{staff.lastname}}</div>
+    <div class="col-2">{{staff.birthday}}</div>
+    <div class="text-center" style="width: 50px">{{staff.sex}}</div>
+    <div class="col-1 d-flex justify-content-between align-items-center">
+        <a [routerLink]="[staff.id]"><i class="fa-solid fa-eye text-info"></i></a>
+        <a [routerLink]="'add/'+[staff.id]"><i class="fa-solid text-warning fa-pen-to-square"></i></a>
+        <a [routerLink]="'edit/'+[staff.id]"><i class="fa-solid fa-trash-can text-danger"></i></a>
+    </div>
+</div>

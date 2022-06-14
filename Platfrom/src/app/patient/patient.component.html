@@ -1,8 +1,8 @@
 <app-nav-bar></app-nav-bar>
-<div class="container d-flex justify-content-between mb-4">
+<div class="container bg-success text-light p-3 align-items-center d-flex justify-content-between mb-4">
     <h2>Patients</h2>
     <div class="addDataset">
-        <a routerLink="/platform/patient/add" class="link-success text-decoration-none"><i class="fa-solid fa-plus fs-4"></i> Add Patient</a>
+        <a routerLink="/platform/patient/add" class="link-light text-decoration-none"><i class="fa-solid fa-plus fs-2"></i></a>
     </div>
 </div>
 <div class="container my-4">
@@ -18,11 +18,7 @@
         </div>
         <div class="body list-group">
             <app-patient-view *ngFor="let patient of patients"
-                              [firstname]="patient.firstname"
-                              [lastname]="patient.lastname"
-                              [birthday]="patient.birthday"
-                              [sex]="patient.sex"
-                              [id] ="patient.id"
+                             [patient] = "patient"
             ></app-patient-view>
         </div>
     </div>

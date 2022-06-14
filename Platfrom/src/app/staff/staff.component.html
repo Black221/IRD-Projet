@@ -17,11 +17,7 @@
 </div>
 
 <div class="container">
-    <div class="p-4">
-        <div class="" *ngFor="let ecg of ecgs">
-            <app-ecg-view
-                          [ecg]="ecg"
-            ></app-ecg-view>
-        </div>
-    </div>
+    <app-staff-view *ngFor="let staff of staffs"
+                        [staff] = "staff"
+    ></app-staff-view>
 </div>

@@ -5,7 +5,7 @@ import {Patient} from "../../models/patient.model";
 import {EcgService} from "../../services/ecg.service";
 import {DatasetService} from "../../services/dataset.service";
 import {PatientService} from "../../services/patient.service";
-import {ActivatedRoute, Route, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs";
 
 @Component({
@@ -26,6 +26,8 @@ export class PatientEcgComponent implements OnInit {
     // @ts-ignore
     patient: Patient;
     @Input() link = "/platform/patient/";
+    previous: any;
+    next: any;
 
     constructor(private ecgService: EcgService,
                 private datasetService: DatasetService,
