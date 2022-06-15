@@ -5,10 +5,10 @@ const patientController = require('../controllers/patient.controller');
 /**
  * routes for patient
  */
-routerPatient.get('/', patientController.getAllPatients);
-routerPatient.get('/:id', patientController.getSinglePatient);
-routerPatient.post('/', patientController.recordPatient);
-routerPatient.put('/:id', patientController.upadatePatient);
-routerPatient.delete('/:id', patientController.deletePatient);
+routerPatient.get('/getAll', patientController.getAllPatients);
+routerPatient.get('/getOne/:patientId', patientController.getSinglePatient);
+routerPatient.post('/postOne/:createrId', patientController.recordPatient);
+routerPatient.put('/updateOne/:patientId', patientController.upadatePatient);
+routerPatient.delete('/deleteOne/:patientId', patientController.deletePatient);
 
-module.exports = routerPatient;
+module.exports = routerPatient; 
