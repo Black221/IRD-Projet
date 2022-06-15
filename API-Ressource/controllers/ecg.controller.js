@@ -76,21 +76,23 @@ module.exports.addOneEcg = async(req, res) => {
                 });
                 const metadataIdSave = await metadataId.save();
     
-                const dataset = DatasetModel.find({name: req.params.datasetName})
-                const patient = PatientModel.find({_id: req.params.patientId})
-     
+                const dataset = await DatasetModel.findOne({name: req.params.datasetName})
+                const patient = await PatientModel.findOne({_id: req.params.patientId})
+                console.log(dataset)
+                
                 if (dataset && patient) {
                     const ecgId = await new EcgModel({
                         dataset_name: req.params.datasetName, 
-                        metadata_id: metadataIdSave.id,
+                        metadata_id: metadataIdSave._id,
                         patient_id: req.params.patientId,
                         filename: ecgFile.name
                     });
                     const ecgIdSave = await ecgId.save();
-
-                    const filename = ecgIdSave._id +"_"+ patient.firstname.replace(" ","") +"-"+ patient.lastname.replace(" ","")
-                    const datasetRep = dataset._id +"_"+ dataset.name.replace(" ","")
-                    const patientRep = patient._id +"_"+  patient.firstname.replace(" ","") +"-"+ patient.lastname.replace(" ","") +"_"+ dataset.name.replace(" ","")
+                    console.log("iciiiiiiiiiiiiiiiiiiiiiiii")
+                    console.log(patient.firstname)
+                    const filename = ecgId._id +"_"+ patient.firstname.split(" ").join("-") +"-"+ patient.lastname.split(" ").join("-")
+                    const datasetRep = dataset._id +"_"+ dataset.name.split(" ").join("-")
+                    const patientRep = patient._id +"_"+  patient.firstname.split(" ").join("-") +"-"+ patient.lastname.split(" ").join("-") +"_"+ dataset.name.split(" ").join("-")
                     const dir = __dirname +"\\..\\"+ process.env.REP_PATH +"\\"+ process.env.ECG_PATH +"\\"+ datasetRep +"\\"+ patientRep
                     const filepath = dir +"\\"+ filename + ".pdf";
 
@@ -99,12 +101,13 @@ module.exports.addOneEcg = async(req, res) => {
                     }
                     await ecgFile.mv(filepath);
         
-                    const numberEcg = ecgIdSave.id;
+                    //const numberEcg = ecgIdSave._id;
+                    //console.log(numberEcg)
                     const ecgIdSaveFilepath = await EcgModel.findByIdAndUpdate(
                         {_id: ecgIdSave.id}, 
                         { $set: { 
                             filepath: filepath, 
-                            numberEcg: numberEcg, 
+                            //numberEcg: numberEcg, 
                             filename: filename
                         } }, 
                         { new: true });
@@ -158,12 +161,12 @@ module.exports.updateOneEcg = async(req, res) => {
             }
             await ecgFile.mv(filepath);
 
-            const numberEcg = updatedEcg.id;
+            //const numberEcg = updatedEcg.id;
             const updatedEcgFilepath = await EcgModel.findByIdAndUpdate(
                 {_id: updatedEcg.id}, 
                 { $set: { 
                     filepath: filepath, 
-                    numberEcg: numberEcg, 
+                    //numberEcg: numberEcg, 
                     filename: filename
                 } }, 
                 { new: true }

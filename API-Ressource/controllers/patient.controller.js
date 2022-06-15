@@ -37,8 +37,8 @@ module.exports.getSinglePatient = async(req, res) => {
 module.exports.recordPatient = async(req, res) => {
     try {
         const newPatient = await new patientModel({
-            firstname: req.body.name,
-            lastname: req.body.surname,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
             dateOfBirth: req.body.dateOfBirth,
             cni: req.body.cni,
             nationality: req.body.nationality,
