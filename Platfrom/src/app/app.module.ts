@@ -36,6 +36,11 @@ import { PatientEcgComponent } from './patient-ecg/patient-ecg.component';
 import { BackLinkComponent } from './back-link/back-link.component';
 import { SpecificDatasetEcgComponent } from './specific-dataset-ecg/specific-dataset-ecg.component';
 import { SpecificStaffComponent } from './specific-staff/specific-staff.component';
+import {StaffService} from "../services/staff.service";
+import { FilterComponent } from './filter/filter.component';
+import { EditPatientComponent } from './edit-patient/edit-patient.component';
+import { EditStaffComponent } from './edit-staff/edit-staff.component';
+import { EditDatasetComponent } from './edit-dataset/edit-dataset.component';
 
 // @ts-ignore
 const appRoutes : Routes = [
@@ -98,7 +103,11 @@ const secondRoutes: Routes = [
         PatientEcgComponent,
         BackLinkComponent,
         SpecificDatasetEcgComponent,
-        SpecificStaffComponent
+        SpecificStaffComponent,
+        FilterComponent,
+        EditPatientComponent,
+        EditStaffComponent,
+        EditDatasetComponent
     ],
     imports: [
         RouterModule.forRoot(appRoutes),
@@ -110,6 +119,7 @@ const secondRoutes: Routes = [
     providers: [
         DatasetService,
         PatientService,
+        StaffService,
         EcgService
     ],
     bootstrap: [AppComponent]

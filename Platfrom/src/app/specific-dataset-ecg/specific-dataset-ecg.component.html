@@ -1,11 +1,8 @@
 <app-nav-bar></app-nav-bar>
 <div class="container mt-lg-5">
-    <div class="p-3 bg-success d-flex align-content-center justify-content-between text-light">
+    <div class="px-4 bg-success d-flex align-items-center justify-content-between text-light">
         <h2>{{dataset.name}}</h2>
-        <div class="fs-2">
-            <a routerLink="/platform/dataset/ecg/{{dataset.id+'/'+previous}}" class="link-light mx-3"><i class="fa-solid fa-arrow-left"></i></a>
-            <a routerLink="/platform/dataset/ecg/{{dataset.id+'/'+next}}" class="link-light mx-3"><i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+        <app-filter></app-filter>
     </div>
     <div class="container mt-lg-2">
         <div *ngFor="let ecg of ecgs">

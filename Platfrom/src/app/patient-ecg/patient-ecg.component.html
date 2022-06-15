@@ -1,21 +1,8 @@
 <app-nav-bar></app-nav-bar>
 <div class="container">
-    <div class="container d-flex align-content-center justify-content-between  bg-success p-3 px-4">
+    <div class="container d-flex align-items-center justify-content-between  bg-success px-4">
         <h2 class="bg-success text-light">{{patient.firstname+' '+patient.lastname}}</h2>
-        <form action="" class=" mx-4 d-flex">
-            <select class="form-select dropdown">
-                <option value="">--Filter--</option>
-                <option value="name">Name</option>
-                <option value="created_at">Creation date</option>
-                <option value="last_update">Last update</option>
-                <option value="number_of_ecg">Number of ecg</option>
-            </select>
-        </form>
-        <div class="">
-            <a routerLink="/platform/ecg/add" class="link-light fs-3 mx-4"><i class="fa-solid fa-plus"></i></a>
-            <a routerLink="/platform/ecg/page/{{previous}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-left"></i></a>
-            <a routerLink="/platform/ecg/page/{{next}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+        <app-filter></app-filter>
     </div>
     <div class="container mt-3">
         <div class="container" *ngFor="let ecg of ecgs">

@@ -6,7 +6,7 @@ export class Staff {
                 public lastname: string,
                 public email: string,
                 public cni: string,
-                public birthday: Date,
+                public birthday: string,
                 public nationality: string,
                 public login: string,
                 public password: string,

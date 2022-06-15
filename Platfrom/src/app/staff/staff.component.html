@@ -1,23 +1,27 @@
 <app-nav-bar></app-nav-bar>
-<div class="container d-flex align-content-center justify-content-between  bg-success p-3">
-    <form action="" class=" mx-4 d-flex">
-        <select class="form-select dropdown">
-            <option value="">--Filter--</option>
-            <option value="name">Name</option>
-            <option value="created_at">Creation date</option>
-            <option value="last_update">Last update</option>
-            <option value="number_of_ecg">Number of ecg</option>
-        </select>
-    </form>
-    <div class="">
-        <a routerLink="/platform/ecg/add" class="link-light fs-3 mx-4"><i class="fa-solid fa-plus"></i></a>
-        <a routerLink="/platform/ecg/page/{{previous}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-left"></i></a>
-        <a routerLink="/platform/ecg/page/{{next}}" class="link-light fs-3 mx-2"><i class="fa-solid fa-arrow-right"></i></a>
+<div class="container bg-success text-light p-3 align-items-center d-flex justify-content-between mb-4">
+    <h2>Staffs</h2>
+    <div class="addDataset">
+        <a routerLink="/platform/patient/add" class="link-light text-decoration-none"><i class="fa-solid fa-plus fs-2"></i></a>
+    </div>
+</div>
+<div class="container my-4">
+    <div class="table-responsive table">
+        <div class="justify-content-between d-flex fw-bold col-12 py-2">
+            <div style="width: 15px">#</div>
+            <div style="width: 50px">Id</div>
+            <div class="col-4 ">Firstname</div>
+            <div class="col-2">Lastname</div>
+            <div class="col-2">Birthday</div>
+            <div class="" style="width: 50px">Sex</div>
+            <div class="col-1">Actions</div>
+        </div>
+        <div class="body list-group">
+            <app-staff-view *ngFor="let staff of staffs"
+                              [staff] = "staff"
+            ></app-staff-view>
+        </div>
     </div>
 </div>
 
-<div class="container">
-    <app-staff-view *ngFor="let staff of staffs"
-                        [staff] = "staff"
-    ></app-staff-view>
-</div>
+
