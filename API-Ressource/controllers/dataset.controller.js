@@ -1,6 +1,8 @@
 const DatasetModel = require("../models/DatasetModel")
+const EcgModel = require("../models/EcgModel")
 const MetadataModel = require("../models/MetadataModel")
 
+const EcgController = require('./ecg.controller')
 
 // Afficher toutes les pathologies
 module.exports.getAllDataset = async(req, res) => {
@@ -33,17 +35,23 @@ module.exports.getOneDataset = async(req, res) => {
 
 // Ajouter une pathologie
 module.exports.addOneDataset = async(req, res) => {
-    const metadata = new MetadataModel({
-        created_by: req.body.creater,
-        last_updated_by: req.body.creater
-    })
-    const newMetadata = await metadata.save()
-    const newDataset = new DatasetModel({
-        name: req.body.name,
-        metadata_id: newMetadata._id,
-        description: req.body.description
-    })
-    newDataset.save().then(data => res.status(200).send(data)).catch(err => res.send(500, 'Echec lors de l\'insertion de la pathologie dans la base de donnée'))
+    try {
+        const metadata = new MetadataModel({
+            created_by: req.params.createrId,
+            last_updated_by: req.params.createrId
+        })
+        const newMetadata = await metadata.save()
+        const newDataset = new DatasetModel({
+            name: req.body.name,
+            metadata_id: newMetadata._id,
+            description: req.body.description
+        })
+        const data = newDataset.save()
+        res.status(200).send({data, newMetadata})
+    } catch (error) {
+        res.status(500).json({message: error})
+        const deletedMetadata = await MetadataModel.deleteOne({_id: newMetadata._id})
+    }
 }
 
 // Modifier une pathologie
@@ -61,7 +69,7 @@ module.exports.updateOneDataset = async(req, res) => {
                 {_id: updatedDataset.metadata_id},
                 {
                     $set: {
-                        last_updated_by: req.body.updater
+                        last_updated_by: req.params.updaterId
                     }
                 },
                 { new: true, upset: true, setDefaultsOnInsert: true }
@@ -76,12 +84,17 @@ module.exports.updateOneDataset = async(req, res) => {
     }
 }
 
+// SUPPRESSION DES DONNEES TECHNIQUES DES ECGS IMPOSSIBLE pour patient aussi *
+
 // Supprimer une pathologie
 module.exports.removeOneDataset = async(req, res) => {
     try {
         const oneDataset = await DatasetModel.findById(req.params.datasetId)
         if (oneDataset) {
-            const deletedDataset = await DatasetModel.remove({_id:req.params.datasetId})
+            const deletedDataset = await DatasetModel.deleteOne({_id:req.params.datasetId})
+            const deletedMetadata = await MetadataModel.deleteOne({_id: oneDataset.metadata_id})
+            const deletedEcgs = await EcgModel.deleteMany({dataset_name: oneDataset.name})
+            //const deletedMetadataEcgs = await MetadataModel.remove({_id: })
             res.status(200).json('Suppression de la pathologie ' +oneDataset.name+ ' avec succès...')           
     
         } else {
