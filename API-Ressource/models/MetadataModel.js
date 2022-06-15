@@ -4,11 +4,11 @@ const MetadataSchema = mongoose.Schema(
     {
         created_by: {
             type: String,
-            // required: true
+            required: true
         },
         last_updated_by: {
             type: String,
-            // required: true
+            required: true
         },
         etat: {
             type: Boolean,

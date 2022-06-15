@@ -1,28 +1,26 @@
 const { default: mongoose } = require("mongoose");
 
 const PatientSchema = mongoose.Schema({
-    // doctor_id: { // foreign key
-    //     type: String,
-    //     required: true
-    // },
-    // Apres avoir coder API_auth
-    name: {
+    doctor_id: { // foreign key
         type: String,
         required: true
     },
-    surname: {
+    firstname: {
         type: String,
+        required: true
+    },
+    lastname: {
+        type: String, 
         required: true
     },
     numberPatient: {
         type: String,
-        unique: true,
+        unique: true
     },
     dateOfBirth: {
-        type: String,
-        required: true
+        type: Date
     },
-    CNI: {
+    cni: {
         type: String,
         minLength: 13,
         maxLength: 13
@@ -40,18 +38,14 @@ const PatientSchema = mongoose.Schema({
             default: 'Senegal'
         },
         city: {
-            type: String,
-            required: true
+            type: String
         },
         address: {
-            type: String,
-            required: true
+            type: String
         }
     },
     phone: {
-        type: String,
-        required: true
-
+        type: String
     },
     state: {
         type: Boolean,

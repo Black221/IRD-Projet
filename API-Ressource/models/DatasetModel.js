@@ -12,10 +12,6 @@ const DatasetSchema = mongoose.Schema({
     },
     description: {
         type: String
-    },
-    etat: {
-        type: Boolean,
-        default: true
     }
 })
 

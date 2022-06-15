@@ -9,21 +9,24 @@ const MedicalStaffSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    dateOfBirth: {
+    numberMedicalStaff: {
         type: String,
-        required: true
+        unique: true
     },
-    CNI: {
+    dateOfBirth: {
+        type: Date
+    },
+    cni: {
         type: String,
         minLength: 13,
         maxLength: 13
     },
     nationality: {
-        type: String,
+        type: String
     },
     sex: {
         type: String,
-        enum: ['M', 'F'],
+        enum: ['M', 'F']
     },
     login: {
         type: String,
@@ -39,12 +42,8 @@ const MedicalStaffSchema = mongoose.Schema({
     },
     permission: {
         type: String,
-        enum: ['admin', 'special', 'user'],
-    },
-    state: {
-        type: Boolean,
-        default: true
-    }    
+        enum: ['admin', 'special', 'user']
+    }
 })
 
 module.exports = mongoose.model('MedicalStaff', MedicalStaffSchema)

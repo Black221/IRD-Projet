@@ -7,7 +7,7 @@ const EcgSchema = mongoose.Schema({
     },
     metadata_id: { // foreign key
         type: String, 
-        required: true
+        required: true 
     },
     patient_id: { // foreign key
         type: String,
@@ -16,12 +16,10 @@ const EcgSchema = mongoose.Schema({
     numberEcg: {
         type: String,
         unique: true,
-        required: true
     },
-    filename: {
+    filename: { //idECG_nomPatient
         type: String,
-        unique: true,
-        required: true
+        unique: true
     },
     filepath: {
         type: String,
