@@ -3,12 +3,10 @@ const { default: mongoose } = require("mongoose");
 const MetadataSchema = mongoose.Schema(
     {
         created_by: {
-            type: String,
-            required: true
+            type: String
         },
         last_updated_by: {
-            type: String,
-            required: true
+            type: String
         },
         etat: {
             type: Boolean,

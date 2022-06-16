@@ -2,8 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const MedicalStaffSchema = mongoose.Schema({
     metadata_id: { // foreign key
-        type: String, 
-        required: true 
+        type: String 
     },
     firstname: {
         type: String,
