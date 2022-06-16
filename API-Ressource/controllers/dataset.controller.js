@@ -1,7 +1,7 @@
 const DatasetModel = require("../models/DatasetModel")
 const EcgModel = require("../models/EcgModel")
 const MetadataModel = require("../models/MetadataModel")
-
+const fs = require("fs")
 const EcgController = require('./ecg.controller')
 
 // Afficher toutes les pathologies
@@ -48,6 +48,11 @@ module.exports.addOneDataset = async(req, res) => {
         })
         const data = newDataset.save()
         res.status(200).send({data, newMetadata})
+        // const datasetRep = dataset._id +"_"+ dataset.name.split(" ").join("-")
+        // const dir = __dirname +"\\..\\"+ process.env.ECG_PATH +"\\"+ datasetRep
+        // if (!fs.existsSync(dir)){
+        //     fs.mkdirSync(dir, { recursive: true });
+        // }
     } catch (error) {
         res.status(500).json({message: error})
         const deletedMetadata = await MetadataModel.deleteOne({_id: newMetadata._id})

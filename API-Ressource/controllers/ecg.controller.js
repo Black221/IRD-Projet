@@ -88,13 +88,11 @@ module.exports.addOneEcg = async(req, res) => {
                         filename: ecgFile.name
                     });
                     const ecgIdSave = await ecgId.save();
-                    console.log("iciiiiiiiiiiiiiiiiiiiiiiii")
-                    console.log(patient.firstname)
                     const filename = ecgId._id +"_"+ patient.firstname.split(" ").join("-") +"-"+ patient.lastname.split(" ").join("-")
                     const datasetRep = dataset._id +"_"+ dataset.name.split(" ").join("-")
                     const patientRep = patient._id +"_"+  patient.firstname.split(" ").join("-") +"-"+ patient.lastname.split(" ").join("-") +"_"+ dataset.name.split(" ").join("-")
-                    const dir = __dirname +"\\..\\"+ process.env.REP_PATH +"\\"+ process.env.ECG_PATH +"\\"+ datasetRep +"\\"+ patientRep
-                    const filepath = dir +"\\"+ filename + ".pdf";
+                    const dir = __dirname +"\\..\\"+ process.env.ECG_PATH +"\\"+ datasetRep +"\\"+ patientRep
+                    const filepath = dir +"\\"+ filename
 
                     if (!fs.existsSync(dir)){
                         fs.mkdirSync(dir, { recursive: true });
