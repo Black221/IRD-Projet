@@ -1,19 +1,23 @@
 const { default: mongoose } = require("mongoose");
 
 const MedicalStaffSchema = mongoose.Schema({
-    name: {
+    metadata_id: { // foreign key
+        type: String, 
+        required: true 
+    },
+    firstname: {
         type: String,
         required: true
     },
-    surname: {
+    lastname: {
         type: String,
         required: true
     },
-    numberMedicalStaff: {
+    numberMedicalStaff: { 
         type: String,
-        unique: true
+        unique: true 
     },
-    dateOfBirth: {
+    dateOfBirth: { 
         type: Date
     },
     cni: {
@@ -28,6 +32,28 @@ const MedicalStaffSchema = mongoose.Schema({
         type: String,
         enum: ['M', 'F']
     },
+    address: {
+        country: {
+            type: String,
+            default: 'Senegal'
+        },
+        city: {
+            type: String
+        },
+        address: {
+            type: String
+        }
+    },
+    phone: {
+        countryIndicator: {
+            type: String, 
+            minLength: 2,
+            maxLength: 6
+        },
+        phonenumber: {
+            type : String
+        } 
+    },
     login: {
         type: String,
         required: true
@@ -37,12 +63,13 @@ const MedicalStaffSchema = mongoose.Schema({
         required: true
     },
     profession: {
-        type: String,
-        required: true
+        type: String
     },
     permission: {
         type: String,
-        enum: ['admin', 'special', 'user']
+        enum: ['admin', 'special', 'user'],
+        default: 'user',
+        required: true
     }
 })
 
