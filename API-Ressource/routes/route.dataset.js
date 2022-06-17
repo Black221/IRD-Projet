@@ -1,10 +1,6 @@
 const express = require("express")
 routerDataset = express.Router()
 
-//Models
-const DatasetModel = require("../models/DatasetModel")
-const MetadataModel = require("../models/MetadataModel")
-
 // Controllers
 const DatasetController = require('../controllers/dataset.controller')
 
