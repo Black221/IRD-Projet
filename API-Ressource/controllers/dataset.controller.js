@@ -14,10 +14,10 @@ module.exports.getAllDataset = async(req, res) => {
         if (allDataset) {
             res.status(200).json({pathologies: allDataset})      
         } else {
-           res.status(200).json('Rien dans la base de donnée') 
+           res.status(200).json({message: 'Aucune pathologie dans la base de donnée'}) 
         }
     } catch (error) {
-        res.status(500).send('Echec lors de l\'affichage des pathologies présents dans la base de donnée')
+        res.status(500).send({message: error})
     }
 }
 
@@ -25,9 +25,9 @@ module.exports.getAllDataset = async(req, res) => {
 module.exports.getOneDataset = async(req, res) => {
     try {
         const oneDataset = await DatasetModel.findById(req.params.datasetId)
-        const oneMetadata = await MetadataModel.findById(oneDataset.metadata_id)
         if (oneDataset) {
-           res.status(200).send({pathologie: oneDataset, metadata: oneMetadata})
+            const oneMetadata = await MetadataModel.findById(oneDataset.metadata_id)
+            res.status(200).send({pathologie: oneDataset, metadata: oneMetadata})
         } else {
             res.status(400).send({message: 'Id inexistant'})
         }
@@ -41,26 +41,32 @@ module.exports.addOneDataset = async(req, res) => {
     const creater = await MedicalStaffModel.findById({_id: req.params.createrId})
     if(!creater) return res.status(400).json('Personnel inexistant')
     try {
+        const newDataset = new DatasetModel({
+            name: req.body.name,
+            description: req.body.description
+        })
         const metadata = new MetadataModel({
             created_by: req.params.createrId,
             last_updated_by: req.params.createrId
         })
+        const data = await newDataset.save()
         const newMetadata = await metadata.save()
-        const newDataset = new DatasetModel({
-            name: req.body.name,
-            metadata_id: newMetadata._id,
-            description: req.body.description
-        })
-        const data = newDataset.save()
-        res.status(200).send({pathologie: data, metadata: newMetadata})
-        const datasetRep = dataset.name.split(" ").join("-") +"_"+  dataset._id
+        const datasetRep = data.name.split(" ").join("-") +"_"+  data._id
         const dir = process.env.ECG_PATH +""+ process.env.SE +""+ datasetRep
         if (!fs.existsSync(dir)){
             fs.mkdirSync(dir, { recursive: true });
         }
-    } catch (error) {
+        const updatedDataset = await DatasetModel.findByIdAndUpdate(
+            {_id: data._id},
+            {$set: {
+                path: dir,
+                metadata_id: newMetadata._id
+            }}
+        )
+        res.status(200).send({pathologie: updatedDataset, metadata: newMetadata})
+        } catch (error) {
         res.status(500).json({message: error})
-        const deletedMetadata = await MetadataModel.deleteOne({_id: newMetadata._id})
+        console.log(error)
     }
 }
 
@@ -71,7 +77,6 @@ module.exports.updateOneDataset = async(req, res) => {
     try {
         const dataset = await DatasetModel.findById({_id: req.params.datasetId})
         if (!dataset) return res.status(400).send('Pathologie inexistante')
-        const datasetName = dataset.name
         const updatedDataset = await DatasetModel.findByIdAndUpdate(
             {_id: req.params.datasetId},
             {$set: {
@@ -89,7 +94,6 @@ module.exports.updateOneDataset = async(req, res) => {
             },
             { new: true, upset: true, setDefaultsOnInsert: true }
         )
-        res.status(200).json({pathologie: updatedDataset, metadata: updatedMetadata})   
         if (dataset.name != updatedDataset.name) {
             const oldDatasetRep = dataset._id +"_"+ dataset.name.split(" ").join("-")
             const oldDir = process.env.ECG_PATH +""+ process.env.SE +""+ oldDatasetRep
@@ -102,8 +106,13 @@ module.exports.updateOneDataset = async(req, res) => {
             } else {
                 fs.rename(oldDir, dir)
             }
-    
+            await DatasetModel.findByIdAndUpdate(
+                {_id: updatedDataset._id},
+                {$set: {path: dir}}
+            )    
         }
+        res.status(200).json({pathologie: updatedDataset, metadata: updatedMetadata})   
+
     } catch (error) {
         res.status(500).send(error)
     }
@@ -115,23 +124,27 @@ module.exports.updateOneDataset = async(req, res) => {
 module.exports.removeOneDataset = async(req, res) => {
     try {
         const oneDataset = await DatasetModel.findById(req.params.datasetId)
-        if (oneDataset) {
-            await DatasetModel.deleteOne({_id:req.params.datasetId})
-            await MetadataModel.deleteOne({_id: oneDataset.metadata_id})
-            const allEcgs = await EcgModel.find({dataset_id: oneDataset._id})
-            allEcgs.forEach(ecg => {
-                MetadataModel.deleteOne({_id: ecg.metadata_id})
-                EcgMetadataModel.deleteOne({ecg_id: ecg._id}) 
-            });
-            await EcgModel.deleteMany({dataset_id: oneDataset._id})
-            res.status(200).json('Suppression de la pathologie ' +oneDataset.name+ ' avec succès...')     
-            
-            fs
-    
-        } else {
-           return res.status(400).send({message: 'Id inexistant'})
-        }
-    
+        if(!oneDataset) return res.status(400).send({message: 'Id inexistant'})
+
+        await DatasetModel.deleteOne({_id:req.params.datasetId})
+        await MetadataModel.deleteOne({_id: oneDataset.metadata_id})
+        const allEcgs = await EcgModel.find({dataset_id: oneDataset._id})
+        allEcgs.forEach(ecg => {
+            MetadataModel.deleteOne({_id: ecg.metadata_id})
+            EcgMetadataModel.deleteOne({ecg_id: ecg._id}) 
+        });
+        await EcgModel.deleteMany({dataset_id: oneDataset._id})
+        res.status(200).json({message: 'Suppression de la pathologie ' +oneDataset.name+ ' avec succès...'})     
+        
+        fs.rmdir(oneDataset.path, 
+            {recursive: true},
+            (error => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log({message: "Suppression du repertoire et des sous repertoires"})
+                }
+        }))   
     } catch (error) {
         res.status(500).send({message: error})
     }   

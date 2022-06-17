@@ -1,6 +1,7 @@
 const PatientModel = require('../models/PatientModel');
 const ecgModel = require('../models/EcgModel');
 const MetadataModel = require('../models/MetadataModel');
+const MedicalStaffModel = require('../models/MedicalStaffModel');
 const manageId = require('mongoose').Types.ObjectId;
 
 /**

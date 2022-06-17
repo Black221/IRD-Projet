@@ -50,7 +50,7 @@ module.exports.getMedicalStaffById = async(req, res) => {
 module.exports.postOneMedicalStaff = async(req, res) => {
     try {
         // const present = await MedicalStaffModel.findOne({_id: req.params.createrId})
-        if (!present) return res.status(400).send('Personnel inexistant')
+        //if (!present) return res.status(400).send('Personnel inexistant')
         const newMedicalStaff = await new MedicalStaffModel({
             firstname: req.body.firstname,
             lastname: req.body.lastname,
@@ -88,11 +88,11 @@ module.exports.postOneMedicalStaff = async(req, res) => {
  * @param {string} medicalStaffId - The id of medical staff.
  * chekc if id is valid before doing anything else.         
  */
- module.exports.updateMedicalStaff = async(req, res) => {
+ module.exports.updateMedicalStaff = async(req, res) => { // PROBLEME ICI
 
     if (!manageId.isValid(req.params.medicalStaffId)) return res.status(400).json({message: 'Id  is incorrect'});
     const updater = await MedicalStaffModel.findById({_id: req.params.updaterId})
-    if(!updater) return res.status(400).json('Personnel inexistant')
+    if(!updater) return res.status(400).json({message: 'Personnel inexistant'})
 
     try {
         const medicalStaffData = await MedicalStaffModel.findByIdAndUpdate(
@@ -129,7 +129,7 @@ module.exports.postOneMedicalStaff = async(req, res) => {
  * @param deleterId
  * @param medicalStaffId
  */
-module.exports.deleteMedicalStaff = async(req, res) => {
+module.exports.deleteMedicalStaff = async(req, res) => { // PROBLEME ICI
     if (!manageId.isValid(req.params.medicalStaffId)) return res.status(400).json({message: 'Id  is incorrect'});
     try {
         const medicalStaff = await MedicalStaffModel.findById({ _id: req.params.medicalStaffId});
@@ -138,6 +138,7 @@ module.exports.deleteMedicalStaff = async(req, res) => {
         res.status(200).json({medicalStaffData, metadata});
     } catch (error) {
         res.status(500).json({ message: error });
+        console.log(error)
     }
 
 }
