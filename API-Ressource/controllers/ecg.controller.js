@@ -15,16 +15,18 @@ const validId = require('mongoose').Types.ObjectId;
 module.exports.getAllEcg = async(req, res) => {
     try {
         const allEcg = await EcgModel.find();
-        res.status(200).json(allEcg);
+        res.status(200).json({ecgs: allEcg});
     } catch (error) {
         res.status(500).json({message: error});
     }
 }
 
-// datasetName
+// datasetId
 module.exports.getEcgByDataset = async(req, res) => {
+    const dataset = await DatasetModel.findById({_id: req.params.datasetId})
+    if(!dataset) return res.status(400).json('Pathologie inexistante')
     try {
-        const allEcgByDataset = await EcgModel.find({dataset_name: req.params.datasetName});
+        const allEcgByDataset = await EcgModel.find({dataset_id: req.params.datasetId});
         res.status(200).json(allEcgByDataset);
     } catch (error) {
         res.status(500).json({message: error});
@@ -33,6 +35,9 @@ module.exports.getEcgByDataset = async(req, res) => {
 
 
 module.exports.getEcgByPatient = async(req, res) => {
+    const patient = await PatientModel.findById({_id: req.params.patientId})
+    if(!patient) return res.status(400).json('Patient(e) inexistant(e)')
+
     try {
         const allEcgByPatient = await EcgModel.find({patient_id: req.params.patientId});
         res.status(200).json(allEcgByPatient);
@@ -53,7 +58,7 @@ module.exports.getOneEcg = async(req, res) => {
         try {
             const oneEcg = await EcgModel.findById({_id: req.params.ecgId});
             const oneEcgMetadata = await EcgMetadataModel.find({ecg_id: oneEcg._id})
-            res.status(200).json({oneEcg, oneEcgMetadata});
+            res.status(200).json({ecg: oneEcg, metadata: oneEcgMetadata});
         } catch (error) {
             res.status(500).json({message: error});
         }
@@ -62,9 +67,11 @@ module.exports.getOneEcg = async(req, res) => {
 
     /**
      * @description - This controller permits us to post or create new ecg.
-     * @params - createrId      datasetName     patientId
+     * @params - createrId      datasetId     patientId
      */
 module.exports.addOneEcg = async(req, res) => {
+    const creater = await MedicalStaffModel.findById({_id: req.params.createrId})
+        if(!creater) return res.status(400).json('Personnel inexistant')
         try {
             let ecgFile = req.files.ecgFile
             if (!req.files) {
@@ -76,13 +83,13 @@ module.exports.addOneEcg = async(req, res) => {
                 });
                 const metadataIdSave = await metadataId.save();
     
-                const dataset = await DatasetModel.findOne({name: req.params.datasetName})
+                const dataset = await DatasetModel.findOne({name: req.params.datasetId})
                 const patient = await PatientModel.findOne({_id: req.params.patientId})
                 console.log(dataset)
                 
                 if (dataset && patient) {
                     const ecgId = await new EcgModel({
-                        dataset_name: req.params.datasetName, 
+                        dataset_id: req.params.datasetId, 
                         metadata_id: metadataIdSave._id,
                         patient_id: req.params.patientId,
                         filename: ecgFile.name
@@ -131,12 +138,15 @@ module.exports.addOneEcg = async(req, res) => {
     /**
      * @description - This controller permits us to update ecg.
      * @param {string} ecgId - The id of ecg.
-     * updaterId/:datasetName/:patientId/:ecgId
+     * updaterId/:datasetId/:patientId/:ecgId
      */
 module.exports.updateOneEcg = async(req, res) => {
     if (!validId.isValid(req.params.ecgId)) return res.status(400).json({message: 'Invalid id'});
+    const updater = await MedicalStaffModel.findById({_id: req.params.updaterId})
+    if(!updater) return res.status(400).json('Personnel inexistant')
+
     try {
-        const dataset = DatasetModel.find({name: req.params.datasetName})
+        const dataset = DatasetModel.find({name: req.params.datasetId})
         const patient = PatientModel.find({_id: req.params.patientId})
 
         if (dataset && patient_id) {
@@ -144,7 +154,7 @@ module.exports.updateOneEcg = async(req, res) => {
             const updatedEcg = await EcgModel.findByIdAndUpdate(
                 {_id: req.params.ecgId}, 
                 { $set: {
-                    dataset_name: req.params.datasetName, 
+                    dataset_id: req.params.datasetId, 
                     patient_id: req.params.patientId,
                     filename: ecgFile.name
             }})
@@ -224,7 +234,7 @@ module.exports.deleteOneEcg = async(req, res) => {
         const theEcg = await EcgModel.findById({_id: req.params.ecgId})
         const deletedEcg = await EcgModel.findByIdAndDelete({_id: req.params.ecgId});
         const deletedEcgMetadata = await EcgModel.findOneAndDelete({ecg_id: theEcg._id});
-        res.status(200).json({deletedEcg, deletedEcgMetadata}); 
+        res.status(200).json("Supression de l'ecg " +theEcg.filename+ " avec succès..."); 
     } catch (err) {
         res.status(500).json({message: err});
     }

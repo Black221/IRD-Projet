@@ -2,14 +2,17 @@ const DatasetModel = require("../models/DatasetModel")
 const EcgModel = require("../models/EcgModel")
 const MetadataModel = require("../models/MetadataModel")
 const fs = require("fs")
-const EcgController = require('./ecg.controller')
+const MedicalStaffModel = require("../models/MedicalStaffModel")
+const EcgMetadataModel = require("../models/EcgMetadataModel")
+require('dotenv').config({ path: './.env' });
+
 
 // Afficher toutes les pathologies
 module.exports.getAllDataset = async(req, res) => {
     try {
         const allDataset = await DatasetModel.find()
         if (allDataset) {
-            res.status(200).json({allDataset})      
+            res.status(200).json({pathologies: allDataset})      
         } else {
            res.status(200).json('Rien dans la base de donnée') 
         }
@@ -24,7 +27,7 @@ module.exports.getOneDataset = async(req, res) => {
         const oneDataset = await DatasetModel.findById(req.params.datasetId)
         const oneMetadata = await MetadataModel.findById(oneDataset.metadata_id)
         if (oneDataset) {
-           res.status(200).send({oneDataset, oneMetadata})
+           res.status(200).send({pathologie: oneDataset, metadata: oneMetadata})
         } else {
             res.status(400).send({message: 'Id inexistant'})
         }
@@ -35,6 +38,8 @@ module.exports.getOneDataset = async(req, res) => {
 
 // Ajouter une pathologie
 module.exports.addOneDataset = async(req, res) => {
+    const creater = await MedicalStaffModel.findById({_id: req.params.createrId})
+    if(!creater) return res.status(400).json('Personnel inexistant')
     try {
         const metadata = new MetadataModel({
             created_by: req.params.createrId,
@@ -47,12 +52,12 @@ module.exports.addOneDataset = async(req, res) => {
             description: req.body.description
         })
         const data = newDataset.save()
-        res.status(200).send({data, newMetadata})
-        // const datasetRep = dataset._id +"_"+ dataset.name.split(" ").join("-")
-        // const dir = __dirname +"\\..\\"+ process.env.ECG_PATH +"\\"+ datasetRep
-        // if (!fs.existsSync(dir)){
-        //     fs.mkdirSync(dir, { recursive: true });
-        // }
+        res.status(200).send({pathologie: data, metadata: newMetadata})
+        const datasetRep = dataset.name.split(" ").join("-") +"_"+  dataset._id
+        const dir = process.env.ECG_PATH +""+ process.env.SE +""+ datasetRep
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir, { recursive: true });
+        }
     } catch (error) {
         res.status(500).json({message: error})
         const deletedMetadata = await MetadataModel.deleteOne({_id: newMetadata._id})
@@ -61,28 +66,43 @@ module.exports.addOneDataset = async(req, res) => {
 
 // Modifier une pathologie
 module.exports.updateOneDataset = async(req, res) => {
+    const updater = await MedicalStaffModel.findById({_id: req.params.updaterId})
+    if(!updater) return res.status(400).json('Personnel inexistant')
     try {
+        const dataset = await DatasetModel.findById({_id: req.params.datasetId})
+        if (!dataset) return res.status(400).send('Pathologie inexistante')
+        const datasetName = dataset.name
         const updatedDataset = await DatasetModel.findByIdAndUpdate(
             {_id: req.params.datasetId},
             {$set: {
                 name: req.body.name,
                 description: req.body.description,
-        }},
-        { new: true, upset: true, setDefaultsOnInsert: true }
+            }},
+            { new: true, upset: true, setDefaultsOnInsert: true }
         )
-            const updatedMetadata = await MetadataModel.findByIdAndUpdate(
-                {_id: updatedDataset.metadata_id},
-                {
-                    $set: {
-                        last_updated_by: req.params.updaterId
-                    }
-                },
-                { new: true, upset: true, setDefaultsOnInsert: true }
-            )
-        if (updatedDataset) {
-            res.status(200).json({updatedDataset, updatedMetadata})     
-        } else {
-            res.status(400).json({message: 'Id inexistant'})
+        const updatedMetadata = await MetadataModel.findByIdAndUpdate(
+            {_id: updatedDataset.metadata_id},
+            {
+                $set: {
+                    last_updated_by: req.params.updaterId
+                }
+            },
+            { new: true, upset: true, setDefaultsOnInsert: true }
+        )
+        res.status(200).json({pathologie: updatedDataset, metadata: updatedMetadata})   
+        if (dataset.name != updatedDataset.name) {
+            const oldDatasetRep = dataset._id +"_"+ dataset.name.split(" ").join("-")
+            const oldDir = process.env.ECG_PATH +""+ process.env.SE +""+ oldDatasetRep
+    
+            const datasetRep = updatedDataset._id +"_"+ updatedDataset.name.split(" ").join("-")
+            const dir = process.env.ECG_PATH +""+ process.env.SE +""+ datasetRep
+            
+            if (!fs.existsSync( oldDir)){
+                fs.mkdirSync(dir, { recursive: true });
+            } else {
+                fs.rename(oldDir, dir)
+            }
+    
         }
     } catch (error) {
         res.status(500).send(error)
@@ -96,14 +116,20 @@ module.exports.removeOneDataset = async(req, res) => {
     try {
         const oneDataset = await DatasetModel.findById(req.params.datasetId)
         if (oneDataset) {
-            const deletedDataset = await DatasetModel.deleteOne({_id:req.params.datasetId})
-            const deletedMetadata = await MetadataModel.deleteOne({_id: oneDataset.metadata_id})
-            const deletedEcgs = await EcgModel.deleteMany({dataset_name: oneDataset.name})
-            //const deletedMetadataEcgs = await MetadataModel.remove({_id: })
-            res.status(200).json('Suppression de la pathologie ' +oneDataset.name+ ' avec succès...')           
+            await DatasetModel.deleteOne({_id:req.params.datasetId})
+            await MetadataModel.deleteOne({_id: oneDataset.metadata_id})
+            const allEcgs = await EcgModel.find({dataset_id: oneDataset._id})
+            allEcgs.forEach(ecg => {
+                MetadataModel.deleteOne({_id: ecg.metadata_id})
+                EcgMetadataModel.deleteOne({ecg_id: ecg._id}) 
+            });
+            await EcgModel.deleteMany({dataset_id: oneDataset._id})
+            res.status(200).json('Suppression de la pathologie ' +oneDataset.name+ ' avec succès...')     
+            
+            fs
     
         } else {
-            res.status(400).send({message: 'Id inexistant'})
+           return res.status(400).send({message: 'Id inexistant'})
         }
     
     } catch (error) {

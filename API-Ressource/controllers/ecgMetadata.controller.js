@@ -7,10 +7,13 @@ const MetadataModel = require("../models/MetadataModel")
 // /ecg
 module.exports.addOneECGMetadata = async(req, res) => {
     const ecg_id = EcgModel.findById(req.params.ecgId) 
+    const creater = await MedicalStaffModel.findById({_id: req.params.createrId})
+    if(!creater) return res.status(400).json('Personnel inexistant')
+
     if (ecg_id) {
         const metadata = MetadataModel({
-            created_by: req.body.creater,
-            last_updated_by: req.body.creater
+            created_by: req.params.createrId,
+            last_updated_by: req.params.createrId
     
         })
         const newMetadata = await metadata.save()
