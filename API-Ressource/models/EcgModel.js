@@ -6,8 +6,7 @@ const EcgSchema = mongoose.Schema({
         required: true
     },
     metadata_id: { // foreign key
-        type: String, 
-        required: true 
+        type: String
     },
     patient_id: { // foreign key
         type: String,

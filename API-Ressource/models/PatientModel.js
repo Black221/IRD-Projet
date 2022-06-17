@@ -6,11 +6,7 @@ const PatientSchema = mongoose.Schema({
         required: true
     },
     metadata_id: { // foreign key
-        type: String, 
-        required: true 
-    },
-    path: {
-        type: String
+        type: String 
     },
     firstname: {
         type: String,

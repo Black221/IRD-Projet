@@ -2,8 +2,7 @@ const { default: mongoose } = require("mongoose");
 
 const DatasetSchema = mongoose.Schema({
     metadata_id: { // foreign key
-        type: String, 
-        required: true
+        type: String
     },
     path: {
         type: String
@@ -12,7 +11,7 @@ const DatasetSchema = mongoose.Schema({
         type: String,
         unique: true,
         required: true
-    },
+    }, 
     description: {
         type: String
     }
