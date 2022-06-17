@@ -15,12 +15,12 @@ const app = express();
 const fs = require('fs')
 const fileUpload = require('express-fileupload');
 const replace = require('replace');
-
+const cors = require('cors')
 /**
  * middlewares
  */
 app.use(bodyParser.json());
-
+app.use(cors())
 app.use(fileUpload({createParentPath: true}))
 app.use('/ecg', routeForEcg);
 app.use('/patient', routeForPatient);

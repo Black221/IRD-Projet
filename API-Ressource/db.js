@@ -25,7 +25,8 @@ let localConnect = function () {
 }
 
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
+//const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true});
+const client = new MongoClient(uri_local, { useNewUrlParser: true, useUnifiedTopology: true});
 client.connect(err => {
     if (!err) {
         connected = true;
