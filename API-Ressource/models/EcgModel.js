@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
 const EcgSchema = mongoose.Schema({
-    dataset_name: { // foreign key
+    dataset_id: { // foreign key
         type: String, 
         required: true
     },

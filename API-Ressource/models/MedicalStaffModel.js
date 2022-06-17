@@ -12,10 +12,10 @@ const MedicalStaffSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    numberMedicalStaff: { 
-        type: String,
-        unique: true 
-    },
+    // numberMedicalStaff: { 
+    //     type: String,
+    //     unique: true 
+    // },
     dateOfBirth: { 
         type: Date
     },

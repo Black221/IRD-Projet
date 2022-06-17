@@ -9,6 +9,9 @@ const PatientSchema = mongoose.Schema({
         type: String, 
         required: true 
     },
+    path: {
+        type: String
+    },
     firstname: {
         type: String,
         required: true
