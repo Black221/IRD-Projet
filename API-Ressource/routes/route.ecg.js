@@ -9,11 +9,11 @@ const ecgController = require('../controllers/ecg.controller');
  * routes for ecg
  */
 routerEcg.get('/getAll', ecgController.getAllEcg);
-routerEcg.get('/getByDataset/:datasetName', ecgController.getEcgByDataset);
+routerEcg.get('/getByDataset/:datasetId', ecgController.getEcgByDataset);
 routerEcg.get('/getbyPatient/:patientId', ecgController.getEcgByPatient);
 routerEcg.get('/getOne/:ecgId', ecgController.getOneEcg);
-routerEcg.post('/postOne/:createrId/:datasetName/:patientId', ecgController.addOneEcg);
-routerEcg.put('/updateOne/:updaterId/:datasetName/:patientId/:ecgId', ecgController.updateOneEcg);
+routerEcg.post('/postOne/:createrId/:datasetId/:patientId', ecgController.addOneEcg);
+routerEcg.put('/updateOne/:updaterId/:datasetId/:patientId/:ecgId', ecgController.updateOneEcg);
 routerEcg.delete('/deleteOne/:ecgId', ecgController.deleteOneEcg);
 
 module.exports = routerEcg;
