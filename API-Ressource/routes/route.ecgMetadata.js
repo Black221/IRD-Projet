@@ -1,15 +1,11 @@
 const express = require("express")
-router = express.Router()
-
-//models
-const EcgMetadataModel = require("../models/EcgMetadataModel")
-const EcgModel = require("../models/EcgModel")
-const MetadataModel = require("../models/MetadataModel")
-
+const router = express.Router()
 
 // controller
 const EcgMetadataController = require('../controllers/ecgMetadata.controller')
 
 // Créer un ECG Metadata
-router.post('/postOne/:createrId', EcgMetadataController.addOneECGMetadata)
+router.post('/postOne/:createrId/:ecgId', EcgMetadataController.addOneECGMetadata)
 
+//expoest router
+module.exports = router

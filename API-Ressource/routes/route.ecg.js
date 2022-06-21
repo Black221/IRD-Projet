@@ -5,7 +5,7 @@ const ecgController = require('../controllers/ecg.controller');
 // routerEcg.use(fileUpload({
 //     createParentPath: true
 // }));
-/**
+/** 
  * routes for ecg
  */
 routerEcg.get('/getAll', ecgController.getAllEcg);
