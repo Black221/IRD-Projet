@@ -3,27 +3,28 @@ const { default: mongoose } = require("mongoose");
 const EcgMetadataSchema = mongoose.Schema({
     ecg_id: { // foreign key
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     metadata_id: { // foreign key
         type: String
     },
-    recording:{
-        started_at:{
+    recording: {
+        started_at: {
             type: Date
         },
         ended_at: {
             type: Date
         }
     },
-    patient:{ 
-        age:{
+    patient: {
+        age: {
             type: Number
         },
-        height:{
+        height: {
             type: String
         },
-        weight:{
+        weight: {
             type: String
         },
         sex: {
