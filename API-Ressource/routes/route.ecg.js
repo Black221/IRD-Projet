@@ -5,15 +5,15 @@ const ecgController = require('../controllers/ecg.controller');
 // routerEcg.use(fileUpload({
 //     createParentPath: true
 // }));
-/** 
+/**
  * routes for ecg
  */
-routerEcg.get('/getAll', ecgController.getAllEcg);
-routerEcg.get('/getByDataset/:datasetId', ecgController.getEcgByDataset);
-routerEcg.get('/getbyPatient/:patientId', ecgController.getEcgByPatient);
-routerEcg.get('/getOne/:ecgId', ecgController.getOneEcg);
+routerEcg.get('/getAll/:getterId', ecgController.getAllEcg);
+routerEcg.get('/getByDataset/:getterId/:datasetId', ecgController.getEcgByDataset);
+routerEcg.get('/getbyPatient/:getterId/:patientId', ecgController.getEcgByPatient);
+routerEcg.get('/getOne/:getterId/:ecgId', ecgController.getOneEcg);
 routerEcg.post('/postOne/:createrId/:datasetId/:patientId', ecgController.addOneEcg);
 routerEcg.put('/updateOne/:updaterId/:datasetId/:patientId/:ecgId', ecgController.updateOneEcg);
-routerEcg.delete('/deleteOne/:ecgId', ecgController.deleteOneEcg);
+routerEcg.delete('/deleteOne/:deleterId/:ecgId', ecgController.deleteOneEcg);
 
 module.exports = routerEcg;

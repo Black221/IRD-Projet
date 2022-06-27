@@ -1,24 +1,20 @@
 const express = require("express")
-const routerDataset = express.Router()
+routerDataset = express.Router()
 
 // Controllers
 const DatasetController = require('../controllers/dataset.controller')
-
 
 //Creer une pathologie
 routerDataset.post('/postOne/:createrId', DatasetController.addOneDataset)
 
 //Afficher toutes les pathologies
-routerDataset.get('/getAll', DatasetController.getAllDataset)
+routerDataset.get('/getAll/:getterId', DatasetController.getAllDatasets)
 
 //Afficher une pathologie
-routerDataset.get('/getOne/:datasetId', DatasetController.getOneDataset)
+routerDataset.get('/getOne/:getterId/:datasetId', DatasetController.getOneDataset)
 
 //Modifier une pathologie
 routerDataset.put('/updateOne/:updaterId/:datasetId', DatasetController.updateOneDataset)
-
-//Supprimer une pathologie
-routerDataset.delete('/deleteOne/:datasetId', DatasetController.removeOneDataset)
 
 
 module.exports = routerDataset
