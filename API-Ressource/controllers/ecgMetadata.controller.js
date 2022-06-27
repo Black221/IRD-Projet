@@ -1,43 +1,63 @@
 const EcgMetadataModel = require("../models/EcgMetadataModel")
 const EcgModel = require("../models/EcgModel")
 const MetadataModel = require("../models/MetadataModel")
-const MedicalStaffModel = require("../models/MedicalStaffModel")
+const AssistantModel = require("../models/AssistantModel")
+const PatientModel = require("../models/PatientModel")
 
+//Ajouter un ECG Metadata
 
-//Creer un ECG Metadata
-// /ecg
 module.exports.addOneECGMetadata = async(req, res) => {
-    const ecg_id = EcgModel.findById({ _id: req.params.ecgId })
-    const creater = await MedicalStaffModel.findById({ _id: req.params.createrId })
-    if (!creater) return res.status(400).json('Personnel inexistant')
+    const patient = await PatientModel.findOne({ _id: req.body.patientId })
+    if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
 
-    if (ecg_id) {
-        const allecg = await EcgMetadataModel.find({ ecg_id: req.params.ecgId })
-        if (allecg.length > 0) return res.status(400).json('ECG metadata déjà existant')
-        const metadata = await new MetadataModel({
-            created_by: req.params.createrId,
-            last_updated_by: req.params.createrId
-
-        })
-        const newMetadata = await metadata.save()
-        const newECGMetadata = await new EcgMetadataModel({
-            ecg_id: req.params.ecgId,
-            metadata_id: newMetadata._id,
-            recording: {
-                started_at: req.body.started_at,
-                ended_at: req.body.ended_at
-            },
-            patient: {
-                age: req.body.patient.age,
-                height: req.body.height,
-                weight: req.body.weight,
-                sex: req.body.sex
-            }
-        })
-        newECGMetadata.save().then(data => res.status(200).send(data)).catch(err => res.send(500, 'Echec lors de l\'insertion de l\'ecg metadata dans la base de donnée'))
+    const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId })
+    const creater2 = await AssistantModel.findOne({ _id: req.params.createrId })
+    if (creater) {
+        if (creater.permission != 'admin' && creater._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
     } else {
-        res.status(400).json('ECG inexistant')
+        if (creater2.doctor_id != patient.doctor_id) {
+            return res.status(400).json({ message: 'Personnel non autorisé !' })
+        } else
+            return res.status(400).json({ message: 'Personnel inexistant !' })
     }
 
+    try {
+        const ecg_id = EcgModel.findById({ _id: req.params.ecgId })
+        if (ecg_id) {
+            const newECGMetadata = EcgMetadataModel({
+                ecg_id: req.params.ecgId,
+                metadata_id: newMetadata._id,
+                recording: req.body.recording,
+                patient: req.body.patient
+            })
+            const metadata = MetadataModel({
+                created_by: req.params.createrId,
+                last_updated_by: req.params.createrId
+            })
+            const ecgMetadata = await newECGMetadata.save()
+            const newMetadata = await metadata.save()
+            res.status(200).send({ ecgMetadata: ecgMetadata, metadata: newMetadata })
+        } else {
+            res.status(400).json('ECG inexistant')
+        }
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
 
+module.exports.calculAge = async(req, res) => {
+    try {
+        const ecg = await EcgModel.findOne({ _id: req.params.ecgId })
+        if (!ecg) return res.status(400).json({ message: '' })
+        const patient = await PatientModel.findOne({ _id: ecg.patient_id })
+        if (!patient) return res.status(400).json({ message: '' })
+        const birthday = new Date(patient.birthday)
+        const ecgMetadata = await EcgMetadataModel.findOne({ ecg_id: req.params.ecgId })
+        if (!ecgMetadata) return res.status(400).json({ message: '' })
+        const recording = new Date(ecgMetadata.recording.date)
+        const age = Math.floor((recording - birthday) / (1000 * 60 * 60 * 24 * 365))
+        res.status(200).json({ age: age })
+    } catch (error) {
+        res.status(500).json(error)
+    }
 }
