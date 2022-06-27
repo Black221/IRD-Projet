@@ -5,8 +5,8 @@ const PatientSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    metadata_id: { // foreign key
-        type: String
+    antecedent_tab: {
+        type: [String]
     },
     firstname: {
         type: String,
@@ -16,11 +16,7 @@ const PatientSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    numberPatient: {
-        type: String,
-        unique: true
-    },
-    dateOfBirth: {
+    birthday: {
         type: Date
     },
     cni: {
@@ -48,18 +44,15 @@ const PatientSchema = mongoose.Schema({
         }
     },
     phone: {
-        countryIndicator: {
-            type: String,
-            minLength: 2,
-            maxLength: 6
-        },
-        phonenumber: {
-            type: String
-        }
+        type: String
     },
     state: {
         type: Boolean,
         default: true
+    },
+    onDeleteCascade: {
+        type: Boolean,
+        default: false
     }
 
 })

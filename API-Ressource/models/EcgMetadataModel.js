@@ -3,13 +3,17 @@ const { default: mongoose } = require("mongoose");
 const EcgMetadataSchema = mongoose.Schema({
     ecg_id: { // foreign key
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     metadata_id: { // foreign key
-        type: String
+        type: String,
+        required: true
     },
     recording: {
+        date: {
+            type: Date,
+            default: Date.now
+        },
         started_at: {
             type: Date
         },
@@ -26,10 +30,6 @@ const EcgMetadataSchema = mongoose.Schema({
         },
         weight: {
             type: String
-        },
-        sex: {
-            type: String,
-            enum: ['M', 'F']
         }
     },
     state: {
