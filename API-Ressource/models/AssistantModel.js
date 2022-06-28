@@ -12,10 +12,10 @@ const AssistantSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    numberAssistant: {
-        type: String,
-        unique: true
-    },
+    // numberAssistant: {
+    //     type: String,
+    //     unique: true
+    // },
     birthday: {
         type: Date
     },
@@ -55,8 +55,7 @@ const AssistantSchema = mongoose.Schema({
         required: true
     },
     profession: {
-        type: String,
-        required: true
+        type: String
     },
     state: {
         type: Boolean,

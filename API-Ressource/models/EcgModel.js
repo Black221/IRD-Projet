@@ -1,12 +1,15 @@
 const { default: mongoose } = require("mongoose");
 
 const EcgSchema = mongoose.Schema({
-    dataset_tab: { // foreign key
-        type: [String]
-    },
-    metadata_id: { // foreign key
+    dataset_id: { // foreign key
         type: String,
         required: true
+    },
+    // dataset_tab: { // foreign key
+    //     type: [String]
+    // },
+    metadata_id: { // foreign key
+        type: String
     },
     patient_id: { // foreign key
         type: String,
