@@ -14,11 +14,16 @@ module.exports.addOneECGMetadata = async(req, res) => {
     const creater2 = await AssistantModel.findOne({ _id: req.params.createrId })
     if (creater) {
         if (creater.permission != 'admin' && creater._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
+        if (creater.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
     } else {
-        if (creater2.doctor_id != patient.doctor_id) {
-            return res.status(400).json({ message: 'Personnel non autorisé !' })
-        } else
-            return res.status(400).json({ message: 'Personnel inexistant !' })
+        if (creater2) {
+            if (creater2.doctor_id != patient.doctor_id) {
+                return res.status(400).json({ message: 'Personnel non autorisé !' })
+            } else
+                return res.status(400).json({ message: 'Personnel inexistant !' })
+
+        }
+        if (creater2.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
     }
 
     try {

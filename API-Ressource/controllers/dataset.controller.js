@@ -14,9 +14,9 @@ require('dotenv').config({ path: '../config/.env' });
  */
 module.exports.getAllDatasets = async(req, res) => {
     try {
-        const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-        const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
-        if (!getter && !getter2) return res.status(400).json('Personnel inexistant')
+        // const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+        // const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
+        // if (!getter && !getter2) return res.status(400).json('Personnel inexistant')
         const allDatasets = await DatasetModel.find()
         if (allDatasets.length === 0) return res.status(404).json({ message: 'Aucune pathologie cardiaque !' })
         res.status(200).json({ pathologies: allDatasets })
@@ -35,9 +35,9 @@ module.exports.getAllDatasets = async(req, res) => {
  * @returns oneDataset
  */
 module.exports.getOneDataset = async(req, res) => {
-    const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-    const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
-    if (!getter && !getter2) return res.status(400).json('Personnel inexistant')
+    // const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+    // const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
+    // if (!getter && !getter2) return res.status(400).json('Personnel inexistant')
 
     try {
         const oneDataset = await DatasetModel.findById({ _id: req.params.datasetId })
@@ -75,22 +75,28 @@ module.exports.addOneDataset = async(req, res) => {
         const data = await newDataset.save()
         const newMetadata = await metadata.save()
         const datasetRep = data._id
-        const dir = `${process.env.ECG_PATH}${process.env.SE}${datasetRep}`
-        console.log(dir)
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+            //const dir = `${process.env.ECG_PATH}${process.env.SE}${datasetRep}`
+        const path = __dirname + process.env.SE + ".." + process.env.SE + ".." + process.env.SE + "platform" + process.env.SE + "src" + process.env.SE + "assets" + process.env.SE + "ECG" + process.env.SE + "" + datasetRep
+
+        console.log(path)
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path, { recursive: true });
         }
-        const datasetName = data.name.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+
+        const dir = "assets" + process.env.SE + "ECG" + process.env.SE + "" + datasetRep
+            // const datasetName = data.name.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
         const updatedDataset = await DatasetModel.findByIdAndUpdate({ _id: data._id }, {
             $set: {
-                path: dir,
-                metadata_id: newMetadata._id,
-                name: datasetName
+                path: path,
+                dir: dir,
+                metadata_id: newMetadata._id
+                    // name: datasetName
             }
         })
         res.status(200).send({ pathologie: updatedDataset, metadata: newMetadata })
     } catch (error) {
         res.status(500).json({ message: error })
+        console.log(error)
     }
 }
 
@@ -103,25 +109,25 @@ module.exports.addOneDataset = async(req, res) => {
  * @returns updatedDataset updatedMetadata
  */
 module.exports.updateOneDataset = async(req, res) => {
-    const updater = await MedicalStaff.findById({ _id: req.params.updaterId })
+    const updater = await MedicalStaffModel.findById({ _id: req.params.updaterId })
     if (!updater) return res.status(400).json('Personnel inexistant')
     if (updater.permission != "admin") return res.status(400).json('Personnel non autorisé')
     try {
         const dataset = await DatasetModel.findById({ _id: req.params.datasetId })
         if (!dataset) return res.status(400).send('Pathologie inexistante')
-        const Dataset = await DatasetModel.findByIdAndUpdate({ _id: req.params.datasetId }, {
-            $set: {
-                name: req.body.name,
-                description: req.body.description
-            }
-        }, { new: true, upset: true, setDefaultsOnInsert: true })
-        const datasetName = Dataset.name.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+        const updatedDataset = await DatasetModel.findByIdAndUpdate({ _id: req.params.datasetId }, {
+                $set: {
+                    name: req.body.name,
+                    description: req.body.description
+                }
+            }, { new: true, upset: true, setDefaultsOnInsert: true })
+            // const datasetName = Dataset.name.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
 
-        const updatedDataset = await DatasetModel.findByIdAndUpdate({ _id: Dataset._id }, {
-            $set: {
-                name: datasetName
-            }
-        })
+        // const updatedDataset = await DatasetModel.findByIdAndUpdate({ _id: Dataset._id }, {
+        //     $set: {
+        //         name: datasetName
+        //     }
+        // })
         const updatedMetadata = await MetadataModel.findByIdAndUpdate({ _id: updatedDataset.metadata_id }, {
             $set: {
                 last_updated_by: req.params.updaterId

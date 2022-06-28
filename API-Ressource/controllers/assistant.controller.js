@@ -10,9 +10,9 @@ const AssistantModel = require('../models/AssistantModel')
  */
 module.exports.getAllAssistant = async(req, res) => {
     try {
-        const getter = await MedicalStaffModel.findById({ _id: req.params.getterId })
-        if (!getter) return res.status(400).json({ message: 'Personnel inexistant' })
-        if (getter.permission != "admin") return res.status(400).json('Personnel non autorisé')
+        // const getter = await MedicalStaffModel.findById({ _id: req.params.getterId })
+        // if (!getter) return res.status(400).json({ message: 'Personnel inexistant' })
+        // if (getter.permission != "admin") return res.status(400).json('Personnel non autorisé')
         const assisantData = await AssistantModel.find({ state: true })
         if (assisantData.length == 0) return res.status(404).json({ message: 'Aucun assistant !' })
 
@@ -35,10 +35,10 @@ module.exports.getAllAssistant = async(req, res) => {
  * @returns assistantData
  */
 module.exports.getAssistantById = async(req, res) => {
-    const present = await AssistantModel.findOne({ _id: req.params.getterId })
-    if (!present) return res.status(400).send('Personnel inexistant')
-    if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-    if (present.state == false) return res.status(400).send('Personnel medical inactif')
+    // const present = await AssistantModel.findOne({ _id: req.params.getterId })
+    // if (!present) return res.status(400).send('Personnel inexistant')
+    // if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+    // if (present.state == false) return res.status(400).send('Personnel medical inactif')
     try {
         const assistantData = await AssistantModel.findById({ _id: req.params.assistantId });
         if (!assistantData) return res.status(400).json({ status: 'Personnel medical inexistant' })
@@ -58,14 +58,14 @@ module.exports.getAssistantById = async(req, res) => {
  */
 module.exports.postOneAssistant = async(req, res) => {
     try {
-        const present = await MedicalStaffModel.findOne({ _id: req.params.posterId })
-        if (!present) return res.status(400).send('Personnel inexistant')
-        if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-        if (present.state == false) return res.status(400).send('Personnel medical inactif')
+        // const present = await MedicalStaffModel.findOne({ _id: req.params.posterId })
+        // if (!present) return res.status(400).send('Personnel inexistant')
+        // if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+        // if (present.state == false) return res.status(400).send('Personnel medical inactif')
         const doctor = await MedicalStaffModel.findById({ _id: req.params.doctorId })
         if (!doctor) return res.status(400).send('Personnel medical inexistant')
         if (doctor.state == false) return res.status(400).send('Personnel medical inactif')
-        const newAssistant = await new AssistantModel({
+        const newAssistant = new AssistantModel({
             firstname: req.body.firstname,
             lastname: req.body.lastname,
             birthday: req.body.dateOfBirth,
@@ -81,12 +81,11 @@ module.exports.postOneAssistant = async(req, res) => {
         });
         const saveAssistant = await newAssistant.save();
 
-        const saveMetadata = await metadata.save()
-        const firstname = saveMedicalStaff.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-        const lastname = saveMedicalStaff.lastname.toUpperCase()
+        const firstname = saveAssistant.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+        const lastname = saveAssistant.lastname.toUpperCase()
+        console.log("o;lkcgjxfhdgx")
         const assistantData = await AssistantModel.findByIdAndUpdate({ _id: saveAssistant._id }, {
             $set: {
-                metadata_id: saveMetadata._id,
                 firstname: firstname,
                 lastname: lastname
             }
@@ -109,12 +108,12 @@ module.exports.updateAssistant = async(req, res) => {
     const assistant = await AssistantModel.findById({ _id: req.params.assistantId });
     if (!assistant) return res.status(400).json('Personnel medical inexistant')
     if (assistant.state == false) return res.status(400).json('Personnel medical inactif')
-    if (req.params.assistantId != req.params.updaterId) {
-        const present = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
-        if (!present) return res.status(400).send('Personnel inexistant')
-        if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-        if (present.state == false) return res.status(400).send('Personnel medical inactif')
-    }
+        // if (req.params.assistantId != req.params.updaterId) {
+        //     const present = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
+        //     if (!present) return res.status(400).send('Personnel inexistant')
+        //     if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+        //     if (present.state == false) return res.status(400).send('Personnel medical inactif')
+        // }
     try {
         const assistantData = await AssistantModel.findByIdAndUpdate({ _id: req.params.assistantId }, {
             $set: {
@@ -128,11 +127,12 @@ module.exports.updateAssistant = async(req, res) => {
                 phone: req.body.phone,
                 login: req.body.login,
                 password: req.body.password,
-                profession: req.body.profession
+                profession: req.body.profession,
+                doctor_id: req.params.doctorId
             }
         });
-        const firstname = saveMedicalStaff.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-        const lastname = saveMedicalStaff.lastname.toUpperCase()
+        const firstname = assistantData.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
+        const lastname = assistantData.lastname.toUpperCase()
         const updatedAssistant = await AssistantModel.findByIdAndUpdate({ _id: assistantData._id }, {
             $set: {
                 firstname: firstname,
@@ -142,6 +142,7 @@ module.exports.updateAssistant = async(req, res) => {
         res.status(200).json({ personnel_medical: updatedAssistant });
     } catch (error) {
         res.status(500).json({ message: error });
+        console.log(error)
     }
 }
 module.exports.updateDoctor = async(req, res) => {
@@ -176,10 +177,10 @@ module.exports.updateDoctor = async(req, res) => {
  */
 
 module.exports.deleteAssistant = async(req, res) => {
-    const present = await MedicalStaffModel.findOne({ _id: req.params.deleterId })
-    if (!present) return res.status(400).send('Personnel inexistant')
-    if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-    if (present.state == false) return res.status(400).send('Personnel medical inactif')
+    //     const present = await MedicalStaffModel.findOne({ _id: req.params.deleterId })
+    //     if (!present) return res.status(400).send('Personnel inexistant')
+    //     if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+    //     if (present.state == false) return res.status(400).send('Personnel medical inactif')
     try {
         const assistant = await AssistantModel.findById({ _id: req.params.assistantId });
         if (!assistant) return res.status(400).json('Personnel medical inexistant')

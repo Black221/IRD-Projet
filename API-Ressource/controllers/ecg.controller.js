@@ -6,6 +6,7 @@ const PatientModel = require('../models/PatientModel');
 const MedicalStaffModel = require('../models/MedicalStaffModel');
 const AssistantModel = require('../models/AssistantModel');
 const fs = require('fs');
+const { update } = require('../models/EcgMetadataModel');
 require('dotenv').config({ path: '../config/.env' });
 
 const validId = require('mongoose').Types.ObjectId;
@@ -14,10 +15,10 @@ const validId = require('mongoose').Types.ObjectId;
  * @description - This controller is used to list all ecg .
  */
 module.exports.getAllEcg = async(req, res) => {
-    const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-    if (!getter) return res.status(400).json({ message: 'Personnel inexistant !' })
-    if (getter.permission != 'admin' && getter.permission != 'user') return res.status(400).json({ message: 'Personnel non autorisé !' })
-    if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+    // const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+    // if (!getter) return res.status(400).json({ message: 'Personnel inexistant !' })
+    // if (getter.permission != 'admin' && getter.permission != 'user') return res.status(400).json({ message: 'Personnel non autorisé !' })
+    // if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
     try {
         const allEcg = await EcgModel.find({ state: true });
         if (allEcg.length == 0) return res.status(404).json({ message: 'Aucun ECG !' })
@@ -30,10 +31,10 @@ module.exports.getAllEcg = async(req, res) => {
 
 // datasetName
 module.exports.getEcgByDataset = async(req, res) => {
-    const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-    if (!getter) return res.status(400).json({ message: 'Personnel inexistant !' })
-    if (getter.permission != 'admin' && getter.permission != 'user') return res.status(400).json({ message: 'Personnel non autorisé !' })
-    if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+    // const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+    // if (!getter) return res.status(400).json({ message: 'Personnel inexistant !' })
+    // if (getter.permission != 'admin' && getter.permission != 'user') return res.status(400).json({ message: 'Personnel non autorisé !' })
+    // if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
     const dataset = DatasetModel.find({
         _id: req.params.datasetId
     })
@@ -48,25 +49,25 @@ module.exports.getEcgByDataset = async(req, res) => {
 
 
 module.exports.getEcgByPatient = async(req, res) => {
-    const patient = PatientModel.find({
+    const patient = await PatientModel.findOne({
         _id: req.params.patientId
     })
     if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
     if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
-    const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-    const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
-    if (getter) {
-        if (getter.permission != 'admin' && getter._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
-        if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
-    } else {
-        if (getter2) {
-            if (getter2.doctor_id != patient.doctor_id) {
-                return res.status(400).json({ message: 'Personnel non autorisé !' })
-            }
-            if (getter2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
-        } else
-            return res.status(400).json({ message: 'Personnel inexistant !' })
-    }
+        // const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+        // const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
+        // if (getter) {
+        //     if (getter.permission != 'admin' && getter._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
+        //     if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+        // } else {
+        //     if (getter2) {
+        //         if (getter2.doctor_id != patient.doctor_id) {
+        //             return res.status(400).json({ message: 'Personnel non autorisé !' })
+        //         }
+        //         if (getter2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+        //     } else
+        //         return res.status(400).json({ message: 'Personnel inexistant !' })
+        // }
     try {
         const allEcgByPatient = await EcgModel.find({ patient_id: req.params.patientId });
         res.status(200).json({ ecgs: allEcgByPatient });
@@ -83,13 +84,13 @@ module.exports.getEcgByPatient = async(req, res) => {
  * check if id is valid before doing anything else.
  */
 module.exports.getOneEcg = async(req, res) => {
-    const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-    const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
-    if (!getter && !getter2) return res.status(400).json('Personnel inexistant')
-    if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
-    if (getter2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+    //     const getter = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+    //     const getter2 = await AssistantModel.findOne({ _id: req.params.getterId })
+    //     if (!getter && !getter2) return res.status(400).json('Personnel inexistant')
+    //     if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+    //     if (getter2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
     try {
-        const oneEcg = await EcgModel.findById({ _id: req.params.ecgId });
+        const oneEcg = await EcgModel.findById({ _id: req.params.ecgId }).populate('metadata_id').populate('');
         if (!oneEcg) return res.status(404).json({ message: 'ECG inexistant !' })
         const oneEcgMetadata = await EcgMetadataModel.find({ ecg_id: oneEcg._id }, {
             state: true
@@ -111,16 +112,17 @@ module.exports.getOneEcg = async(req, res) => {
  */
 module.exports.addOneEcg = async(req, res) => {
     try {
-        const patient = PatientModel.find({
+        const patient = PatientModel.findOne({
             _id: req.params.patientId
         })
         if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
         if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
-        const dataset = DatasetModel.find({
+        const dataset = DatasetModel.findOne({
             _id: req.params.datasetId
         })
-        if (!dataset) return res.status(404).json({ message: 'Pathologie inexistante !' })
 
+        if (!dataset) return res.status(404).json({ message: 'Pathologie inexistante !' })
+        console.log({ patient, dataset })
         const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId })
         const creater2 = await AssistantModel.findOne({ _id: req.params.createrId })
         if (creater) {
@@ -128,44 +130,46 @@ module.exports.addOneEcg = async(req, res) => {
             if (creater.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
         } else {
             if (creater2) {
-                if (creater2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
                 if (creater2.doctor_id != patient.doctor_id) {
                     return res.status(400).json({ message: 'Personnel non autorisé !' })
-                } else
-                    return res.status(400).json({ message: 'Personnel inexistant !' })
+                }
+                if (creater2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+            } else
+                return res.status(400).json({ message: 'Personnel inexistant !' })
 
-            }
         }
 
         const ecgId = new EcgModel({
             dataset_id: req.params.datasetId,
-            metadata_id: metadataIdSave.id,
-            patient_id: req.params.patientId
+            patient_id: req.params.patientId,
+            comments: req.body.comments
         });
         const ecgIdSave = await ecgId.save();
 
-        const filename = ecgIdSave._id + "_" + patient._id
-        const patientRep = patient._id + "_" + dataset._id
-        const dir = `${dataset.path}${process.env.SE}${patientRep}`
+        const filename = ecgIdSave._id + "_" + req.params.patientId
+        const patientRep = req.params.patientId + "_" + req.params.datasetId
+        const path = __dirname + process.env.SE + ".." + process.env.SE + ".." + process.env.SE + "platform" + process.env.SE + "src" + process.env.SE + "assets" + process.env.SE + "ECG" + process.env.SE + "" + req.params.datasetId
+        const dir = `${path}${process.env.SE}${patientRep}`
         const filepath = `${dir}${process.env.SE}${filename}`
 
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
 
-        const numberEcg = ecgIdSave._id;
-        const ecgIdSaveFilepath = await EcgModel.findByIdAndUpdate({ _id: ecgIdSave.id }, {
-            $set: {
-                filepath: filepath,
-                numberEcg: numberEcg,
-                filename: filename
-            }
-        }, { new: true });
         const metadataId = new MetadataModel({
             created_by: req.params.createrId,
             last_updated_by: req.params.createrId
         });
         const metadataIdSave = await metadataId.save();
+        // const numberEcg = ecgIdSave._id;
+        const ecgIdSaveFilepath = await EcgModel.findByIdAndUpdate({ _id: ecgIdSave.id }, {
+            $set: {
+                filepath: filepath,
+                filename: filename,
+                metadata_id: metadataIdSave.id,
+
+            }
+        }, { new: true });
         res.status(200).json({ ecg: ecgIdSaveFilepath, metadata: metadataId });
     } catch (error) {
         res.status(500).json({ message: error });
@@ -194,11 +198,16 @@ module.exports.updateOneEcg = async(req, res) => {
     const updater2 = await AssistantModel.findOne({ _id: req.params.updaterId })
     if (updater) {
         if (updater.permission != 'admin' && updater._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
+        if (updater.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
     } else {
-        if (updater2.doctor_id != patient.doctor_id) {
-            return res.status(400).json({ message: 'Personnel non autorisé !' })
+        if (updater2) {
+            if (updater2.doctor_id != patient.doctor_id) {
+                return res.status(400).json({ message: 'Personnel non autorisé !' })
+            }
+            if (updater.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
         } else
             return res.status(400).json({ message: 'Personnel inexistant !' })
+
     }
 
     try {
@@ -264,17 +273,24 @@ module.exports.updateOneEcg = async(req, res) => {
 module.exports.deleteOneEcg = async(req, res) => {
     const ecg = await EcgModel.findById({ _id: req.params.ecgId })
     if (!ecg) return res.status(404).json({ message: 'ECG inexistant !' })
-    const patient = await PatientModel.findById({ _id: ecg.patient_id })
-    const updater = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
-    const updater2 = await AssistantModel.findOne({ _id: req.params.updaterId })
-    if (updater) {
-        if (updater.permission != 'admin' && updater._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
-    } else {
-        if (updater2.doctor_id != patient.doctor_id) {
-            return res.status(400).json({ message: 'Personnel non autorisé !' })
-        } else
-            return res.status(400).json({ message: 'Personnel inexistant !' })
-    }
+        // const patient = await PatientModel.findById({ _id: ecg.patient_id })
+        // const updater = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
+        // const updater2 = await AssistantModel.findOne({ _id: req.params.updaterId })
+
+    // if (updater) {
+    //     if (updater.permission != 'admin' && updater._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
+    // } else {
+    //     if (updater2) {
+    //         if (updater2.permission == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+    //         if (updater2.doctor_id != patient.doctor_id) {
+    //             return res.status(400).json({ message: 'Personnel non autorisé !' })
+    //         } else
+    //             return res.status(400).json({ message: 'Personnel inexistant !' })
+
+    //     } else
+    //         return res.status(400).json({ message: 'Personnel inexistant !' })
+
+    // }
 
     try {
         await EcgModel.findByIdAndUpdate({ _id: req.params.ecgId }, {
