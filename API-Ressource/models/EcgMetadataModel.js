@@ -6,8 +6,7 @@ const EcgMetadataSchema = mongoose.Schema({
         required: true
     },
     metadata_id: { // foreign key
-        type: String,
-        required: true
+        type: String
     },
     recording: {
         date: {
