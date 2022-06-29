@@ -44,20 +44,28 @@ appRes.get('/metadata/get/specific/:id', async(req, res) => {
 
     } catch (error) {
         res.status(500).send({ message: error })
+
     }
 })
 
 appRes.post('/ecg/file/:id', async(req, res) => {
     try {
         const ecg = await EcgModel.findById({ _id: req.params.id })
+        if (!ecg) return res.status(404).json({ message: 'ECG inexistant !' })
+        if (ecg.state == false) return res.status(404).json({ message: "ECG inactif" })
+
         if (req.files) {
             let ecgFile = req.files.ecgFile
             await ecgFile.mv(ecg.filepath)
+            console.log("reussi")
         } else {
             res.status(400)
+            console.log("echec pas de file")
+
         }
     } catch (error) {
         res.status(500).send({ message: error })
+        console.log(error)
     }
 })
 
