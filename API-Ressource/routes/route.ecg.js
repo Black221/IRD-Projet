@@ -14,6 +14,6 @@ routerEcg.get('/getbyPatient/:patientId', ecgController.getEcgByPatient);
 routerEcg.get('/getOne/:ecgId', ecgController.getOneEcg);
 routerEcg.post('/postOne/:createrId/:datasetId/:patientId', ecgController.addOneEcg);
 routerEcg.put('/updateOne/:updaterId/:datasetId/:patientId/:ecgId', ecgController.updateOneEcg);
-routerEcg.delete('/deleteOne/:deleterId/:ecgId', ecgController.deleteOneEcg);
+routerEcg.delete('/deleteOne/:ecgId', ecgController.deleteOneEcg);
 
 module.exports = routerEcg;
