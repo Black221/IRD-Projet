@@ -35,12 +35,12 @@ module.exports.getEcgByDataset = async(req, res) => {
     // if (!getter) return res.status(400).json({ message: 'Personnel inexistant !' })
     // if (getter.permission != 'admin' && getter.permission != 'user') return res.status(400).json({ message: 'Personnel non autorisé !' })
     // if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
-    const dataset = DatasetModel.find({
+    const dataset = await DatasetModel.findOne({
         _id: req.params.datasetId
     })
     if (!dataset) return res.status(404).json({ message: 'Pathologie inexistante !' })
     try {
-        const allEcgByDataset = await EcgModel.find({ dataset_id: req.params.datasetId });
+        const allEcgByDataset = await EcgModel.find({ dataset_id: req.params.datasetId, state: true });
         res.status(200).json({ ecgs: allEcgByDataset });
     } catch (error) {
         res.status(500).json({ message: error });
@@ -69,7 +69,7 @@ module.exports.getEcgByPatient = async(req, res) => {
         //         return res.status(400).json({ message: 'Personnel inexistant !' })
         // }
     try {
-        const allEcgByPatient = await EcgModel.find({ patient_id: req.params.patientId });
+        const allEcgByPatient = await EcgModel.find({ patient_id: req.params.patientId, state: true });
         res.status(200).json({ ecgs: allEcgByPatient });
     } catch (error) {
         res.status(500).json({ message: error });
@@ -90,14 +90,11 @@ module.exports.getOneEcg = async(req, res) => {
     //     if (getter.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
     //     if (getter2.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
     try {
-        const oneEcg = await EcgModel.findById({ _id: req.params.ecgId }).populate('metadata_id').populate('');
+        const oneEcg = await EcgModel.findById({ _id: req.params.ecgId })
         if (!oneEcg) return res.status(404).json({ message: 'ECG inexistant !' })
-        const oneEcgMetadata = await EcgMetadataModel.find({ ecg_id: oneEcg._id }, {
-            state: true
-        })
-        const metadata = await MetadataModel.find({ _id: oneEcg.metadata_id }, {
-            state: true
-        })
+        if (oneEcg.state == false) return res.status(404).json({ message: "ECG inactif" })
+        const oneEcgMetadata = await EcgMetadataModel.findOne({ ecg_id: oneEcg._id, state: true })
+        const metadata = await MetadataModel.findOne({ _id: oneEcg.metadata_id, state: true })
         if (!oneEcgMetadata) return res.status(200).json({ ecg: oneEcg, metadata: metadata })
         res.status(200).json({ ecg: oneEcg, ecgMetadata: oneEcgMetadata, metadata: metadata });
     } catch (error) {
@@ -112,17 +109,16 @@ module.exports.getOneEcg = async(req, res) => {
  */
 module.exports.addOneEcg = async(req, res) => {
     try {
-        const patient = PatientModel.findOne({
+        const patient = await PatientModel.findOne({
             _id: req.params.patientId
         })
         if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
         if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
-        const dataset = DatasetModel.findOne({
+        const dataset = await DatasetModel.findOne({
             _id: req.params.datasetId
         })
-
         if (!dataset) return res.status(404).json({ message: 'Pathologie inexistante !' })
-        console.log({ patient, dataset })
+
         const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId })
         const creater2 = await AssistantModel.findOne({ _id: req.params.createrId })
         if (creater) {
@@ -185,11 +181,11 @@ module.exports.addOneEcg = async(req, res) => {
  * updaterId/:datasetName/:patientId/:ecgId
  */
 module.exports.updateOneEcg = async(req, res) => {
-    const patient = PatientModel.find({
+    const patient = await PatientModel.find({
         _id: req.params.patientId
     })
     if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
-    const dataset = DatasetModel.find({
+    const dataset = await DatasetModel.find({
         _id: req.params.datasetId
     })
     if (!dataset) return res.status(404).json({ message: 'Pathologie inexistante !' })
@@ -218,15 +214,16 @@ module.exports.updateOneEcg = async(req, res) => {
         const updatedEcg = await EcgModel.findByIdAndUpdate({ _id: req.params.ecgId }, {
             $set: {
                 dataset_id: req.params.datasetId,
-                patient_id: req.params.patientId
+                patient_id: req.params.patientId,
+                comments: req.body.comments
             }
         })
 
-        const filename = updatedEcg._id + "_" + patient._id
-        const patientRep = patient._id + "_" + dataset._id
-        const dir = `${dataset.path}${process.env.SE}${patientRep}`
+        const filename = updatedEcg._id + "_" + req.params.patientId
+        const patientRep = req.params.patientId + "_" + req.params.datasetId
+        const path = __dirname + process.env.SE + ".." + process.env.SE + ".." + process.env.SE + "platform" + process.env.SE + "src" + process.env.SE + "assets" + process.env.SE + "ECG" + process.env.SE + "" + req.params.datasetId
+        const dir = `${path}${process.env.SE}${patientRep}`
         const filepath = `${dir}${process.env.SE}${filename}`
-
 
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
@@ -261,6 +258,7 @@ module.exports.updateOneEcg = async(req, res) => {
         res.status(500).json({
             message: err
         });
+        console.log(err)
     }
 }
 
