@@ -1,6 +1,4 @@
 const MedicalStaffModel = require('../models/MedicalStaffModel')
-const AssistantModel = require('../models/AssistantModel')
-const PatientModel = require('../models/PatientModel')
     /**
      * @description get all medicalstaff
      * @param {*} req 
@@ -10,17 +8,17 @@ const PatientModel = require('../models/PatientModel')
      */
 module.exports.getAllMedicalStaff = async(req, res) => {
     try {
-        // const getter = await MedicalStaffModel.findById({ _id: req.params.getterId })
-        // if (!getter) return res.status(400).json({ message: 'Personnel inexistant' })
-        // if (getter.permission != "admin") return res.status(400).json('Personnel non autorisé')
+        const getter = await MedicalStaffModel.findById({ _id: req.params.getterId })
+        if (!getter) return res.status(400).json({ message: 'Personnel inexistant' })
+        if (getter.permission != "admin") return res.status(400).json('Personnel non autorisé')
+
         const medicalStaffData = await MedicalStaffModel.find({ state: true })
         if (medicalStaffData.length == 0) return res.status(404).json({ message: 'Aucun personnel medical !' })
-        res.status(200).json({ personnel_medical: medicalStaffData })
+        res.status(200).json({ medicalStaff: medicalStaffData })
 
     } catch (error) {
-        res.status(500).json({
-            message: error
-        })
+        res.status(500).json({ message: error })
+        console.log(error)
 
     }
 }
@@ -33,16 +31,17 @@ module.exports.getAllMedicalStaff = async(req, res) => {
  * @param {*} getterId
  * @returns medicalStaffData
  */
-module.exports.getMedicalStaffById = async(req, res) => {
-    // const present = await MedicalStaffModel.findOne({ _id: req.params.getterId })
-    // if (!present) return res.status(400).send('Personnel inexistant')
-    // if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-    // if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+module.exports.getOneMedicalStaff = async(req, res) => {
+    const present = await MedicalStaffModel.findOne({ _id: req.params.getterId })
+    if (!present) return res.status(400).send('Personnel inexistant')
+    if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+    if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+
     try {
         const medicalStaffData = await MedicalStaffModel.findById({ _id: req.params.medicalStaffId });
         if (!medicalStaffData) return res.status(400).json('Personnel medical inexistant')
         if (medicalStaffData.state == false) return res.status(400).json({ message: 'Personnel inactif' })
-        res.status(200).json({ personnel_medical: medicalStaffData });
+        res.status(200).json({ medicalStaff: medicalStaffData });
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error)
@@ -56,16 +55,16 @@ module.exports.getMedicalStaffById = async(req, res) => {
  * @param {*} posterId
  * @returns medicalStaffData
  */
-module.exports.postOneMedicalStaff = async(req, res) => {
+module.exports.AddOneMedicalStaff = async(req, res) => {
     try {
-        // const present = await MedicalStaffModel.findOne({ _id: req.params.posterId })
-        // if (!present) return res.status(400).send('Personnel inexistant')
-        // if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-        // if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+        const present = await MedicalStaffModel.findOne({ _id: req.params.createrId })
+        if (!present) return res.status(400).send('Personnel inexistant')
+        if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+        if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
 
-        const newMedicalStaff = await new MedicalStaffModel({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
+        const newMedicalStaff = new MedicalStaffModel({
+            firstname: req.body.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))),
+            lastname: req.body.lastname.toUpperCase(),
             birthday: req.body.dateOfBirth,
             cni: req.body.cni,
             nationality: req.body.nationality,
@@ -77,17 +76,9 @@ module.exports.postOneMedicalStaff = async(req, res) => {
             profession: req.body.profession,
             permission: req.body.permission
         });
-        const saveMedicalStaff = await newMedicalStaff.save();
+        const medicalStaffData = await newMedicalStaff.save();
 
-        const firstname = saveMedicalStaff.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-        const lastname = saveMedicalStaff.lastname.toUpperCase()
-        const medicalStaffData = await MedicalStaffModel.findByIdAndUpdate({ _id: saveMedicalStaff._id }, {
-            $set: {
-                firstname: firstname,
-                lastname: lastname
-            }
-        })
-        res.status(200).json({ personnel_medical: medicalStaffData });
+        res.status(200).json({ medicalStaff: medicalStaffData });
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error)
@@ -104,10 +95,11 @@ module.exports.postOneMedicalStaff = async(req, res) => {
  */
 module.exports.updateMedicalStaff = async(req, res) => {
 
-    // const present = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
-    // if (!present) return res.status(400).send('Personnel inexistant')
-    // if (present.permission != 'admin' || present.permission != 'doctor') return res.status(400).send('Permission non accordée')
-    // if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+    const present = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
+    if (!present) return res.status(400).send('Personnel inexistant')
+    if (present.permission != 'admin' || present.permission != 'doctor') return res.status(400).send('Permission non accordée')
+    if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+
     try {
         const medicalStaff = await MedicalStaffModel.findById({ _id: req.params.medicalStaffId });
         if (!medicalStaff) return res.status(400).json('Personnel medical inexistant')
@@ -115,7 +107,7 @@ module.exports.updateMedicalStaff = async(req, res) => {
 
         const medicalStaffData = await MedicalStaffModel.findByIdAndUpdate({ _id: req.params.medicalStaffId }, {
             $set: {
-                firstname: req.body.firstname,
+                firstname: req.body.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))),
                 lastname: req.body.lastname,
                 birthday: req.body.birthday,
                 cni: req.body.cni,
@@ -129,15 +121,7 @@ module.exports.updateMedicalStaff = async(req, res) => {
                 permission: req.body.permission
             }
         });
-        const firstname = medicalStaffData.firstname.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())));
-        const lastname = medicalStaffData.lastname.toUpperCase()
-        const updatedMedicalStaff = await MedicalStaffModel.findByIdAndUpdate({ _id: medicalStaffData._id }, {
-            $set: {
-                firstname: firstname,
-                lastname: lastname
-            }
-        })
-        res.status(200).json({ personnel_medical: updatedMedicalStaff });
+        res.status(200).json({ medicalStaff: medicalStaffData });
     } catch (error) {
         res.status(500).json({ message: error });
         console.log(error)
@@ -150,14 +134,15 @@ module.exports.updateMedicalStaff = async(req, res) => {
  * @param {*} res
  * @param {*} medicalStaffId
  * @param {*} deleterId
- * @returns
+ * @returns 
  */
 
 module.exports.deleteMedicalStaff = async(req, res) => {
-    // const present = await MedicalStaffModel.findOne({ _id: req.params.deleterId })
-    // if (!present) return res.status(400).send('Personnel inexistant')
-    // if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
-    // if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+    const present = await MedicalStaffModel.findOne({ _id: req.params.deleterId })
+    if (!present) return res.status(400).send('Personnel inexistant')
+    if (present.permission != 'admin') return res.status(400).send('Permission non accordée')
+    if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
+
     try {
         const medicalStaff = await MedicalStaffModel.findById({ _id: req.params.medicalStaffId });
         if (!medicalStaff) return res.status(400).json('Personnel medical inexistant')
@@ -165,12 +150,6 @@ module.exports.deleteMedicalStaff = async(req, res) => {
 
         await MedicalStaffModel.findByIdAndUpdate({ _id: req.params.medicalStaffId }, { $set: { state: false } });
 
-        await PatientModel.find({ doctor_id: req.params.medicalStaffId }).updateMany({ doctor_id: req.params.medicalStaffId }, {
-            $set: { state: false }
-        })
-        await AssistantModel.find({ doctor_id: req.params.medicalStaffId }).updateMany({ doctor_id: req.params.medicalStaffId }, {
-            $set: { state: false }
-        })
 
         res.status(200).json("Archivage du personnel medical " + medicalStaff.firstname + " " + medicalStaff.lastname + " avec succès !")
 
