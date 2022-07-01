@@ -1,12 +1,26 @@
 const { default: mongoose } = require("mongoose");
 
 const PatientSchema = mongoose.Schema({
-    doctor_id: { // foreign key
-        type: String,
-        required: true
+    metadata_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Metadata"
     },
-    antecedent_tab: {
-        type: [String]
+    antecedent: {
+        personnal: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Personnal"
+        },
+        family: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Family"
+        } //To do: Bouna wish we populate  antecedent and symptom in patient controller 
+    },
+    diagnostic: {
+        type: String
+    },
+    symptom: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Symptom"
     },
     firstname: {
         type: String,
@@ -31,6 +45,10 @@ const PatientSchema = mongoose.Schema({
         type: String,
         enum: ['M', 'F']
     },
+    race: {
+        type: String,
+        enum: ['Noire', 'Caucasienne', 'Métisse', 'Indienne', 'Asiatique', 'Arabe']
+    },
     address: {
         country: {
             type: String,
@@ -49,12 +67,7 @@ const PatientSchema = mongoose.Schema({
     state: {
         type: Boolean,
         default: true
-    },
-    onDeleteCascade: {
-        type: Boolean,
-        default: false
     }
-
 })
 
 module.exports = mongoose.model('Patient', PatientSchema)

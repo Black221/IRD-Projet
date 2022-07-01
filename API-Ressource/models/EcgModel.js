@@ -1,24 +1,18 @@
 const { default: mongoose } = require("mongoose");
 
 const EcgSchema = mongoose.Schema({
-    dataset_id: { // foreign key
-        type: String,
-        required: true
-    },
-    // dataset_tab: { // foreign key
-    //     type: [String]
-    // },
-    metadata_id: { // foreign key
-        type: String
+    metadata_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Metadata"
     },
     patient_id: { // foreign key
         type: String,
         required: true
     },
-    comments: {
+    name: { // ECG1_nomPatient
         type: String
     },
-    filename: { //idECG_nomPatient
+    filename: { //ECG_idECG_idPatient
         type: String,
         unique: true
     },
