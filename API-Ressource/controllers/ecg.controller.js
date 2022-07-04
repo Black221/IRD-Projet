@@ -44,7 +44,7 @@ module.exports.getEcgByPatient = async(req, res) => {
  */
 module.exports.getOneEcg = async(req, res) => {
     try {
-        const oneEcg = await EcgModel.findById({ _id: req.params.ecgId, state: true }).populate('metadata_id');
+        const oneEcg = await EcgModel.findById({ _id: req.params.ecgId }).populate('metadata_id');
         if (!oneEcg) return res.status(404).json({ message: 'ECG inexistant !' })
         if (oneEcg.state == false) return res.status(404).json({ message: "ECG inactif" })
         res.status(200).json({ ecg: oneEcg });
@@ -77,7 +77,7 @@ module.exports.addOneEcg = async(req, res) => {
             //  if number of ecg is  0 name of ecg is ECG1_nomPatient else increment number of ecg and affect this to nextNumber ecg
             //  name of ecg is ECG+`${nextNumberecg}`+_nomPatient
             //ECG_idECG_idPatient
-        const ecgCurrentNumber = await EcgModel.countDocuments({ patient_id: req.params.patientId, state: true })
+        const ecgCurrentNumber = await EcgModel.countDocuments({ patient_id: req.params.patientId })
 
         const name = `ECG_${ecgCurrentNumber++}_${patient.firstname}_${patient.lastname}`
         const filename = `ECG_${ecgIdSave._id}_${patient._id}`
@@ -126,6 +126,7 @@ module.exports.updateOneEcg = async(req, res) => {
     try {
         const ecg = await EcgModel.findById({ _id: req.params.ecgId })
         if (!ecg) return res.status(404).json({ message: 'ECG inexistant !' })
+        if (ecg.state == false) return res.status(400).json({ message: "ECG inactif" })
 
         const oldFilepath = ecg.filepath
         const updatedEcg = await EcgModel.findByIdAndUpdate({ _id: req.params.ecgId }, {
@@ -134,10 +135,10 @@ module.exports.updateOneEcg = async(req, res) => {
             }
         })
 
-        const ecgCurrentNumber = await EcgModel.countDocuments({ patient_id: req.params.patientId, state: true })
+        const ecgCurrentNumber = await EcgModel.countDocuments({ patient_id: req.params.patientId })
 
         const name = `ECG_${ecgCurrentNumber++}_${patient.firstname}_${patient.lastname}`
-        const filename = `ECG_${ecgIdSave._id}_${patient._id}`
+        const filename = `ECG_${ecg._id}_${patient._id}`
         const path = __dirname + process.env.SE + ".." + process.env.SE + ".." + process.env.SE + "platform" + process.env.SE + "src" + process.env.SE + "assets" + process.env.SE + "ECG" + process.env.SE + ""
         const dir = `${path}${process.env.SE}${name}`
         const filepath = `${path}${process.env.SE}${filename}`
@@ -185,6 +186,7 @@ module.exports.updateOneEcg = async(req, res) => {
 module.exports.deleteOneEcg = async(req, res) => {
     const ecg = await EcgModel.findById({ _id: req.params.ecgId })
     if (!ecg) return res.status(404).json({ message: 'ECG inexistant !' })
+    if (ecg.state == false) return res.status(400).json({ message: "ECG inactif" })
     const patient = await PatientModel.findById({ _id: ecg.patient_id })
     if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
     if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
