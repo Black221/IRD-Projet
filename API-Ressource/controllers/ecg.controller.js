@@ -63,11 +63,11 @@ module.exports.addOneEcg = async(req, res) => {
         const patient = await PatientModel.findOne({
             _id: req.params.patientId
         })
-        if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
+        if (!patient) return res.status(400).json({ message: 'Patient inexistant !' })
         if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
 
-        const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId })
-        if (!creater) return res.status(404).json({ message: 'Personnel medical inexistant !' })
+        const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId, state: true })
+        if (!creater) return res.status(400).json({ message: 'Personnel medical inexistant !' })
         const ecgId = new EcgModel({
             patient_id: req.params.patientId
         })
@@ -94,11 +94,11 @@ module.exports.addOneEcg = async(req, res) => {
             last_updated_by: req.params.createrId
         });
         const metadataIdSave = await metadataId.save();
-        const ecgIdSaveFilepath = await EcgModel.findByIdAndUpdate({ _id: ecgIdSave.id }, {
+        const ecgIdSaveFilepath = await EcgModel.findByIdAndUpdate({ _id: ecgIdSave._id }, {
             $set: {
                 filepath: filepath,
                 filename: filename,
-                metadata_id: metadataIdSave.id,
+                metadata_id: metadataIdSave._id,
                 name: name
             }
         }, { new: true });
@@ -148,21 +148,17 @@ module.exports.updateOneEcg = async(req, res) => {
         fs.unlink(oldFilepath, err => {
             console.error(err);
         })
-        const updatedEcgFilepath = await EcgModel.findByIdAndUpdate({ _id: updatedEcg.id }, {
+        const updatedEcgFilepath = await EcgModel.findByIdAndUpdate({ _id: updatedEcg._id }, {
             $set: {
                 filepath: filepath,
                 filename: filename,
                 name: name
-
             }
         }, { new: true });
 
-        const updatedEcgMetadata = await EcgMetadataModel.findOneAndUpdate({ ecg_id: req.params.ecgId }, {
-            $set: {
-                recording: req.body.recording,
-                patient: req.body.patient
-            }
-        })
+        const updater = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
+        if (!updater) return res.status(404).json({ message: 'Personnel medical inexistant !' })
+
         const updatedMetadata = await MetadataModel.findByIdAndUpdate({ _id: updatedEcg.metadata_id }, {
             $set: {
                 last_updated_by: req.params.updaterId
@@ -170,7 +166,6 @@ module.exports.updateOneEcg = async(req, res) => {
         }, { new: true, upset: true, setDefaultsOnInsert: true })
         res.status(200).json({
             ecg: updatedEcgFilepath,
-            ecgMetadata: updatedEcgMetadata,
             metadata: updatedMetadata
         })
     } catch (err) {
@@ -187,49 +182,35 @@ module.exports.updateOneEcg = async(req, res) => {
  * @param {string} ecgId - The id of ecg.
  */
 
-// module.exports.deleteOneEcg = async(req, res) => {
-//     const ecg = await EcgModel.findById({ _id: req.params.ecgId })
-//     if (!ecg) return res.status(404).json({ message: 'ECG inexistant !' })
-//         // const patient = await PatientModel.findById({ _id: ecg.patient_id })
-//         // const updater = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
-//         // const updater2 = await AssistantModel.findOne({ _id: req.params.updaterId })
+module.exports.deleteOneEcg = async(req, res) => {
+    const ecg = await EcgModel.findById({ _id: req.params.ecgId })
+    if (!ecg) return res.status(404).json({ message: 'ECG inexistant !' })
+    const patient = await PatientModel.findById({ _id: ecg.patient_id })
+    if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
+    if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
 
-//     // if (updater) {
-//     //     if (updater.permission != 'admin' && updater._id != patient.doctor_id) return res.status(400).json({ message: 'Personnel non autorisé !' })
-//     // } else {
-//     //     if (updater2) {
-//     //         if (updater2.permission == false) return res.status(400).json({ message: 'Personnel medical inactif' })
-//     //         if (updater2.doctor_id != patient.doctor_id) {
-//     //             return res.status(400).json({ message: 'Personnel non autorisé !' })
-//     //         } else
-//     //             return res.status(400).json({ message: 'Personnel inexistant !' })
+    // Qui dois archiver ?
+    const deleter = await MedicalStaffModel.findOne({ _id: req.params.deleterId })
+    if (!deleter) return res.status(404).json({ message: 'Personnel medical inexistant !' })
+    if (deleter.permission != "admin") return res.status(400).json({ message: 'Permission non accordée !' })
 
-//     //     } else
-//     //         return res.status(400).json({ message: 'Personnel inexistant !' })
+    try {
+        await EcgModel.findByIdAndUpdate({ _id: req.params.ecgId }, {
+            $set: {
+                state: false
+            }
+        });
 
-//     // }
+        await MetadataModel.findByIdAndUpdate({ _id: ecg.metadata_id }, {
+            $set: {
+                state: false
+            }
+        })
 
-//     try {
-//         await EcgModel.findByIdAndUpdate({ _id: req.params.ecgId }, {
-//             $set: {
-//                 state: false
-//             }
-//         });
-//         await EcgMetadataModel.findOneAndUpdate({ ecg_id: req.params.ecgId }, {
-//             $set: {
-//                 state: false
-//             }
-//         });
-//         await MetadataModel.findByIdAndUpdate({ _id: ecg.metadata_id }, {
-//             $set: {
-//                 state: false
-//             }
-//         })
-
-//         res.status(200).json({
-//             message: "Archivage de l'ECG " + ecg.filename + " avec succès !"
-//         })
-//     } catch (err) {
-//         res.status(500).json({ message: err });
-//     }
-// }
+        res.status(200).json({
+            message: "Archivage de l'ECG " + ecg.filename + " avec succès !"
+        })
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+}
