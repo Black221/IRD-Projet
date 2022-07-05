@@ -21,9 +21,7 @@ module.exports.getAllEcg = async(req, res) => {
 }
 
 module.exports.getEcgByPatient = async(req, res) => {
-    const patient = await PatientModel.findOne({
-        _id: req.params.patientId
-    })
+    const patient = await PatientModel.findOne({_id: req.params.patientId})
     if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
     if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
 
@@ -60,17 +58,15 @@ module.exports.getOneEcg = async(req, res) => {
  */
 module.exports.addOneEcg = async(req, res) => {
     try {
-        const patient = await PatientModel.findOne({
-            _id: req.params.patientId
-        })
+        const patient = await PatientModel.findOne({_id: req.params.patientId})
         if (!patient) return res.status(400).json({ message: 'Patient inexistant !' })
         if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
 
         const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId, state: true })
         if (!creater) return res.status(400).json({ message: 'Personnel medical inexistant !' })
-        const ecgId = new EcgModel({
-            patient_id: req.params.patientId
-        })
+        if (creater.state == false) return res.status(400).json({ message: 'Personnel medical inactif !' })
+
+        const ecgId = new EcgModel({patient_id: req.params.patientId})
 
         const ecgIdSave = await ecgId.save()
             //first check number of ecg of this patient by id ECG1_nomPatient
@@ -117,9 +113,7 @@ module.exports.addOneEcg = async(req, res) => {
  * updaterId/:datasetName/:patientId/:ecgId
  */
 module.exports.updateOneEcg = async(req, res) => {
-    const patient = await PatientModel.find({
-        _id: req.params.patientId
-    })
+    const patient = await PatientModel.find({_id: req.params.patientId})
     if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
     if (patient.state == false) return res.status(400).json({ message: 'Patient inactif !' })
 

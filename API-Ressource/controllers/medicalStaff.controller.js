@@ -1,4 +1,8 @@
 const MedicalStaffModel = require('../models/MedicalStaffModel')
+
+
+
+
     /**
      * @description get all medicalstaff
      * @param {*} req 
@@ -55,7 +59,7 @@ module.exports.getOneMedicalStaff = async(req, res) => {
  * @param {*} posterId
  * @returns medicalStaffData
  */
-module.exports.AddOneMedicalStaff = async(req, res) => {
+module.exports.addOneMedicalStaff = async(req, res) => {
     try {
         const present = await MedicalStaffModel.findOne({ _id: req.params.createrId })
         if (!present) return res.status(400).send('Personnel inexistant')
@@ -93,11 +97,11 @@ module.exports.AddOneMedicalStaff = async(req, res) => {
  * @param {*} updaterId
  * @returns 
  */
-module.exports.updateMedicalStaff = async(req, res) => {
+module.exports.updateOneMedicalStaff = async(req, res) => {
 
     const present = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
     if (!present) return res.status(400).send('Personnel inexistant')
-    if (present.permission != 'admin' || present.permission != 'doctor') return res.status(400).send('Permission non accordée')
+    if (present.permission != 'admin' && present._id != req.params.medicalStaffId) return res.status(400).send('Permission non accordée')
     if (present.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
 
     try {
@@ -137,7 +141,7 @@ module.exports.updateMedicalStaff = async(req, res) => {
  * @returns 
  */
 
-module.exports.deleteMedicalStaff = async(req, res) => {
+module.exports.deleteOneMedicalStaff = async(req, res) => {
     const present = await MedicalStaffModel.findOne({ _id: req.params.deleterId })
     if (!present) return res.status(400).send('Personnel inexistant')
     if (present.permission != 'admin') return res.status(400).send('Permission non accordée')

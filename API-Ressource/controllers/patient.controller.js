@@ -12,7 +12,7 @@ const MetadataModel = require('../models/MetadataModel');
 
 module.exports.getAllPatient = async(req, res) => {
     try {
-        const patientData = await PatientModel.find({ state: true }).populate("metadata_id");
+        const patientData = await PatientModel.find({ state: true }).populate("metadata_id").populate("antecedent.personnal").populate("symptom");
         if (patientData.length == 0) return res.status(404).json({ message: 'Aucun patient !' })
         res.status(200).json({ patients: patientData });
 
@@ -26,7 +26,7 @@ module.exports.getAllPatient = async(req, res) => {
  * @description - This controller is used to find a patient by id.
  */
 module.exports.getOnePatient = async(req, res) => {
-    const patientData = await PatientModel.findById({ _id: req.params.patientId }).populate("metadata_id");
+    const patientData = await PatientModel.findById({ _id: req.params.patientId }).populate("metadata_id").populate("antecedent.personnal").populate("symptom");
     if (!patientData) return res.status(404).json({ message: 'Patient inexistant !' })
     if (patientData.state == false) return res.status(404).json({ message: 'Patient inactif' })
 
@@ -46,7 +46,6 @@ module.exports.getOnePatient = async(req, res) => {
 module.exports.addOnePatient = async(req, res) => {
     const creater = await MedicalStaffModel.findOne({ _id: req.params.createrId })
     if (!creater) return res.status(400).send('Personnel inexistant')
-        //    if (creater.permission != 'admin') return res.status(400).send('Permission non accordée')
     if (creater.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
 
     try {
@@ -70,10 +69,9 @@ module.exports.addOnePatient = async(req, res) => {
             last_updated_by: req.params.createrId
         })
         const metadata = await newMetadata.save()
-        const updatedPatient = await PatientModel.findByIdAndUpdate({ _id: savePatientData._id }, {
+        const patientData = await PatientModel.findByIdAndUpdate({ _id: savePatientData._id }, {
             $set: { metadata_id: metadata._id }
         })
-        const patientData = await updatedPatient.save();
 
         res.status(200).json({ patient: patientData })
 
@@ -98,12 +96,11 @@ module.exports.updateOnePatient = async(req, res) => {
 
     const updater = await MedicalStaffModel.findOne({ _id: req.params.updaterId })
     if (!updater) return res.status(400).send('Personnel inexistant')
-        //    if (updater.permission != 'admin') return res.status(400).send('Permission non accordée')
     if (updater.state == false) return res.status(400).json({ message: 'Personnel medical inactif' })
 
 
     try {
-        const updatedPatient = await PatientModel.findByIdAndUpdate({ _id: req.params.patientId }, {
+        const patientData = await PatientModel.findByIdAndUpdate({ _id: req.params.patientId }, {
             $set: {
                 antecedent: req.body.antecedent,
                 symptom: req.body.symptom,
@@ -119,16 +116,11 @@ module.exports.updateOnePatient = async(req, res) => {
                 diagnostic: updater.permission != 'assistant' ? req.body.diagnostic : ""
             }
         })
-        const metadata = await MetadataModel.findByIdAndUpdate({ _id: updatedPatient.metadata }, {
+        await MetadataModel.findByIdAndUpdate({ _id: patientData.metadata_id }, {
             $set: {
                 last_updated_by: req.params.updaterId
             }
 
-        })
-        const patientData = await PatientModel.findByIdAndUpdate({ _id: req.params.patientId }, {
-            $set: {
-                metadata_id: metadata._id
-            }
         })
         return res.status(200).json({ patient: patientData })
     } catch (error) {
@@ -147,7 +139,7 @@ module.exports.updateOnePatient = async(req, res) => {
  * change just patient's status to false.
  */
 
-module.exports.deletePatient = async(req, res) => {
+module.exports.deleteOnePatient = async(req, res) => {
     const patient = await PatientModel.findById({ _id: req.params.patientId })
     if (!patient) return res.status(404).json({ message: 'Patient inexistant !' })
     if (patient.state == false) return res.status(404).json({ message: 'Patient inactif' })
@@ -163,6 +155,12 @@ module.exports.deletePatient = async(req, res) => {
                 state: false
             }
         })
+        await MetadataModel.findByIdAndUpdate({ _id: patient.metadata_id }, {
+            $set: {
+                state: false
+            }
+        })
+
         const patientECG = await EcgModel.find({ patient_id: req.params.patientId })
         if (patientECG) {
             for (let i = 0; i < patientECG.length; i++) {
@@ -177,14 +175,9 @@ module.exports.deletePatient = async(req, res) => {
                     }
                 })
             }
-            return res.status(200).json({
-                message: "Archivage du patient " + patientExists.firstname + " " + patientExists.lastname + "  et de ses ECGs avec succès !"
-            })
+            return res.status(200).json({message: "Archivage du patient " + patientExists.firstname + " " + patientExists.lastname + "  et de ses ECGs avec succès !"})
         } else {
-            return res.status(200).json({
-                message: "Archivage du patient " + patientExists.firstname + " " + patientExists.lastname + " avec succès !"
-            })
-
+            return res.status(200).json({message: "Archivage du patient " + patientExists.firstname + " " + patientExists.lastname + " avec succès !"})
         }
     } catch (error) {
         res.status(500).json({ message: error })

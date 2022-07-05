@@ -13,7 +13,7 @@ module.exports.getAllExamType = async(req, res) => {
 }
 module.exports.addOneExamType = async(req, res) => {
     try {
-        if (ExamTypeModel.findOne({ examType: req.body.examType.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
+        if (await ExamTypeModel.findOne({ examType: req.body.examType.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
             return res.status(400).json({ message: 'Type d\'examen déjà existant !' })
         }
         const newExamType = new ExamTypeModel({
@@ -38,7 +38,7 @@ module.exports.updateOneExamType = async(req, res) => {
     if (updater.permission != 'admin') return res.status(400).json({ message: "Personnel non autorisé !" })
 
     try {
-        if (ExamTypeModel.findOne({ examType: req.body.examType.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
+        if (await ExamTypeModel.findOne({ examType: req.body.examType.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
             return res.status(400).json({ message: 'Type d\'examen déjà existant !' })
         }
 
@@ -55,7 +55,7 @@ module.exports.updateOneExamType = async(req, res) => {
     }
 }
 
-module.exports.DeleteOneExamType = async(req, res) => {
+module.exports.deleteOneExamType = async(req, res) => {
     const examType = await ExamTypeModel.findById({ _id: req.params.examTypeId })
     if (!examType) return res.status(404).json({ message: "Type d\'examen inexistant !" })
     if (examType.state == false) return res.status(400).json({ message: "Type d\'examen inactif !" })
@@ -66,7 +66,7 @@ module.exports.DeleteOneExamType = async(req, res) => {
 
     try {
         await ExamTypeModel.findByIdAndUpdate({ _id: req.params.examTypeId }, { $set: { state: false } })
-        res.status(200).json("Archivage du type d\'examen" + examType.examType + "avec succès!")
+        res.status(200).json("Archivage du type d\'examen " + examType.examType + " avec succès !")
     } catch (error) {
         res.status(500).json({ message: error })
         console.log(error)

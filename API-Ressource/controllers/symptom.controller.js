@@ -12,9 +12,11 @@ module.exports.getAllSymptom = async(req, res) => {
         console.log(error)
     }
 }
+
 module.exports.addOneSymptom = async(req, res) => {
+    console.log('fsgbdcnvb')
     try {
-        if (SymptomModel.findOne({ symptom: req.body.symptom.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
+        if (await SymptomModel.findOne({ symptom: req.body.symptom.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
             return res.status(400).json({ message: 'Symptôme déjà existant !' })
         }
         const newSymptom = new SymptomModel({
@@ -39,7 +41,7 @@ module.exports.updateOneSymptom = async(req, res) => {
     if (updater.permission != 'admin') return res.status(400).json({ message: "Personnel non autorisé !" })
 
     try {
-        if (SymptomModel.findOne({ symptom: req.body.symptom.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
+        if (await SymptomModel.findOne({ symptom: req.body.symptom.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
             return res.status(400).json({ message: 'Symptôme dejà existant !' })
         }
 
@@ -56,7 +58,7 @@ module.exports.updateOneSymptom = async(req, res) => {
     }
 }
 
-module.exports.DeleteOneSymptom = async(req, res) => {
+module.exports.deleteOneSymptom = async(req, res) => {
     const symptom = await SymptomModel.findById({ _id: req.params.symptomId })
     if (!symptom) return res.status(404).json({ message: "Symptôme inexistant !" })
     if (symptom.state == false) return res.status(400).json({ message: "Symptôme inactif !" })
@@ -66,8 +68,9 @@ module.exports.DeleteOneSymptom = async(req, res) => {
     if (deleter.permission != 'admin') return res.status(400).json({ message: "Personnel non autorisé !" })
 
     try {
-        await SymptomModel.findByIdAndUpdate({ _id: req.params.symptomId }, { $set: { state: false } })
-        res.status(200).json("Archivage du symptôme" + symptom.symptom + " avec succès !")
+        await SymptomModel.findByIdAndDelete({ _id: req.params.symptomId })
+        res.status(200).json("Suppression du symptôme " + symptom.symptom + " avec succès !")
+        //on delete cascade
     } catch (error) {
         res.status(500).json({ message: error })
         console.log(error)

@@ -1,5 +1,6 @@
 const AntecedentModel = require('../models/AntecedentModel')
 const MedicalStaffModel = require('../models/MedicalStaffModel')
+const PatientModel = require('../models/PatientModel')
 
 module.exports.getAllAntecedent = async(req, res) => {
     try {
@@ -14,7 +15,7 @@ module.exports.getAllAntecedent = async(req, res) => {
 }
 module.exports.addOneAntecedent = async(req, res) => {
     try {
-        if (AntecedentModel.findOne({ antecedent: req.body.antecedent.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
+        if (await AntecedentModel.findOne({ antecedent: req.body.antecedent.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
             return res.status(400).json({ message: 'Antécédent déjà existant !' })
         }
         const newAntecedent = new AntecedentModel({
@@ -39,7 +40,7 @@ module.exports.updateOneAntecedent = async(req, res) => {
     if (updater.permission != 'admin') return res.status(400).json({ message: "Personnel non autorisé !" })
 
     try {
-        if (AntecedentModel.findOne({ antecedent: req.body.antecedent.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
+        if (await AntecedentModel.findOne({ antecedent: req.body.antecedent.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase()))) })) {
             return res.status(400).json({ message: 'Antécédent dejà existant !' })
         }
 
@@ -56,7 +57,7 @@ module.exports.updateOneAntecedent = async(req, res) => {
     }
 }
 
-module.exports.DeleteOneAntecedent = async(req, res) => {
+module.exports.deleteOneAntecedent = async(req, res) => {
     const antecedent = await AntecedentModel.findById({ _id: req.params.antecedentId })
     if (!antecedent) return res.status(404).json({ message: "Antécédent inexistant !" })
     if (antecedent.state == false) return res.status(400).json({ message: "Antécédent inactif !" })
@@ -66,8 +67,10 @@ module.exports.DeleteOneAntecedent = async(req, res) => {
     if (deleter.permission != 'admin') return res.status(400).json({ message: "Personnel non autorisé !" })
 
     try {
-        await AntecedentModel.findByIdAndUpdate({ _id: req.params.antecedentId }, { $set: { state: false } })
-        res.status(200).json("Archivage de l'antécédent" + antecedent.antecedent + " avec succès !")
+        await AntecedentModel.findByIdAndDelete({ _id: req.params.antecedentId })
+        res.status(200).json("Suppression de l'antécédent " + antecedent.antecedent + " avec succès !")
+        // On delete cascade
+        //const patients = await PatientModel.find({antecedent.personnal : req.params.antecedentId})
     } catch (error) {
         res.status(500).json({ message: error })
         console.log(error)
