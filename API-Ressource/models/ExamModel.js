@@ -10,8 +10,9 @@ const ExamSchema = mongoose.Schema({
         required: true
     },
     name: { // Radio1_nomPatient
-        type: String
-    },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ExamType"
+    }, 
     filename: { //nom_idExam_idPatient
         type: String,
         unique: true

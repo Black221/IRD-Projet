@@ -7,19 +7,18 @@ const PatientSchema = mongoose.Schema({
     },
     antecedent: {
         personnal: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Personnal"
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "Antecedent"
         },
         family: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Family"
-        } //To do: Bouna wish we populate  antecedent and symptom in patient controller 
+            type: [String]
+        }  
     },
     diagnostic: {
         type: String
     },
     symptom: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: [mongoose.Schema.Types.ObjectId],
         ref: "Symptom"
     },
     firstname: {
