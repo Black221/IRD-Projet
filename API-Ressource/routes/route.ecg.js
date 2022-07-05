@@ -9,7 +9,6 @@ const ecgController = require('../controllers/ecg.controller');
  * routes for ecg
  */
 routerEcg.get('/getAll', ecgController.getAllEcg);
-routerEcg.get('/getByDataset/:datasetId', ecgController.getEcgByDataset);
 routerEcg.get('/getbyPatient/:patientId', ecgController.getEcgByPatient);
 routerEcg.get('/getOne/:ecgId', ecgController.getOneEcg);
 routerEcg.post('/postOne/:createrId/:datasetId/:patientId', ecgController.addOneEcg);
