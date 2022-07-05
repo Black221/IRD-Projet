@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs')
+require('dotenv').config({ path: './config/.env' })
 
 // // const uri = "mongodb+srv://"+process.env.DB_USER+":"+process.env.DB_PASS+"@guapicluster.z5rby.mongodb.net/"+process.env.DB_NAME;
 // const uri = "mongodb+srv://ird_esp:passer@dbtest.mlfjm.mongodb.net/?retryWrites=true&w=majority"
